@@ -2,6 +2,8 @@ package com.jdc.constructor;
 
 import java.util.Scanner;
 
+import com.jdc.constructor.model.Person;
+
 public class ConstructorApplication {
 
 	public static void main(String[] args) {
