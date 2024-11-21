@@ -1,10 +1,11 @@
-package com.jdc.inheritance;
+package com.jdc.inheritance.model;
 
 public class Vehicle {
 
 	private String make;
 	private String model;
-	private int year;
+	public int year = 2010;
+	private static int count;
 
 	public Vehicle() {
 		System.out.println("Vehicle constructor called.");
@@ -40,6 +41,14 @@ public class Vehicle {
 
 	public void stopEngine() {
 		System.out.println("Vehicle engine stopped.");
+	}
+
+	public static void countUp() {
+		count++;
+	}
+
+	public static int getCount() {
+		return count;
 	}
 
 }
