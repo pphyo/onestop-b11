@@ -16,4 +16,9 @@ public class MotorCycle extends Vehicle {
 		System.out.println("Motor Cycle engine is revved.");
 	}
 
+	@Override // Covarient
+	public Car getSelf() {
+		return null;
+	}
+
 }

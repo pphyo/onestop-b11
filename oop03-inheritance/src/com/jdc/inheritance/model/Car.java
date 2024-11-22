@@ -17,7 +17,7 @@ public class Car extends Vehicle {
 		this.door = door;
 	}
 
-	protected void openDoor(String val) {
+	public void openDoor() {
 		System.out.println("Car door is opened.");
 	}
 

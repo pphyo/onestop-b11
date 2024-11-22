@@ -1,7 +1,7 @@
 package com.jdc.inheritance.model;
 
 // Concrete Class
-public class ElectricCar extends Car {
+public final class ElectricCar extends Car {
 
 	private int batteryCapacity;
 
@@ -20,7 +20,7 @@ public class ElectricCar extends Car {
 	}
 
 	@Override
-	public void openDoor(String val) {
+	public void openDoor() {
 		System.out.println("Electric Car door is opened.");
 	}
 

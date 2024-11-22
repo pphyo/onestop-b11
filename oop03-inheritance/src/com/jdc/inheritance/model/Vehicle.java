@@ -6,6 +6,16 @@ public class Vehicle {
 	private String model;
 	public int year = 2010;
 	private static int count;
+	final int instanceFinal = 10;
+	public static final int staticFinal;
+
+	static {
+		staticFinal = 10;
+	}
+
+	public Vehicle(final String make) {
+		final String data = null;
+	}
 
 	public Vehicle() {
 		System.out.println("Vehicle constructor called.");
@@ -41,6 +51,10 @@ public class Vehicle {
 
 	public void stopEngine() {
 		System.out.println("Vehicle engine stopped.");
+	}
+
+	public Car getSelf() {
+		return null;
 	}
 
 	public static void countUp() {

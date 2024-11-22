@@ -5,11 +5,39 @@ import com.jdc.inheritance.model.*;
 public class InheritanceApplication {
 	
 	public static void main(String[] args) {
-		new InheritanceApplication().launchTwo();
+		new InheritanceApplication()
+			.launchFive(new Car(1));
+	}
+
+	private void launchFive(Vehicle veh) {
+		System.out.println("Start");
+
+		// pattern matching
+		if(veh instanceof Car car) {
+			// Car car = (Car) veh;
+			car.openDoor();
+			car.closeDoor();
+		}
+
+		veh.startEngine();
+		veh.stopEngine();
+
+		System.out.println("Terminate");
+		// ((Spaceship) veh).activateShield();
+		// ((Spaceship) veh).fireWeapon();
+	}
+
+	private void launchFour() {
+		Book book = new Book("", 0, "", 0, "");
+		System.out.println(book);
+	}
+
+	private void launchThree() {
+		Calculator.calculate((byte)10);
 	}
 
 	private void launchTwo() {
-		MotorCycle veh = new MotorCycle();
+		Vehicle veh = new MotorCycle();
 		System.out.println(veh.year);
 		veh.startEngine();
 		// veh.activateShield(); // because veh is type of Vehicle
@@ -45,7 +73,7 @@ public class InheritanceApplication {
 						  );			
 		car.startEngine(); // inherit from Vechile
 		car.stopEngine(); // inherit from Vechile
-		car.openDoor(""); // inherit from Car
+		car.openDoor(); // inherit from Car
 		car.closeDoor(); // inherit from Car
 		car.chargeBattery(); // it's own behaviour
 
