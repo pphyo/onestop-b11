@@ -10,6 +10,6 @@ public class StrategyApplication {
 
 	void launch() {
 		var cart = new ShoppingCart();
-		cart.pay(new AyaPay("pphyo", "0948382823"), 10000);
+		cart.buy(new VisaCard("10293949430303", "012", "Pyae Phyo"), 10000);
 	}
 }
