@@ -3,3 +3,6 @@
 **/.settings
 **/dist
 **/target
+**/.settings
+**/.project
+.metadata
