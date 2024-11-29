@@ -8,7 +8,7 @@ public class DivisionFeature extends AbstractCalculationFeature {
 	
 	@Override
 	public void calculate(int d1, int d2) {
-		System.out.println("%d / %d is %.2f.".formatted(d1, d2, d1 / d2));
+		System.out.println("%d / %d is %.2f.".formatted(d1, d2, (double)(d1 / d2)));
 	}
 
 }
