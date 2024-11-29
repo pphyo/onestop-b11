@@ -17,6 +17,7 @@ public abstract class AbstractCalculationFeature extends AbstractFeature {
 		// get digit two
 		var d2 = getDigitTwo();
 		
+		System.out.println();
 		// show result
 		calculate(d1, d2);
 	}
