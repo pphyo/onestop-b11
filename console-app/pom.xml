@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>core</module>
+		<module>calculator-application</module>
 	</modules>
 	
 	<build>

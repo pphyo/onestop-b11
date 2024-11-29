@@ -14,20 +14,43 @@ public class ConsoleApplication {
 		// show application name
 		showMessage(appName, "=");
 		
-		// show menus
+		do {
+			System.out.println();
+			// show menus and get menu id input
+			AbstractFeature feature = getSelectedFeature();
+			
+			System.out.println();
+			// show feature name
+			showMessage(feature.getFeatureName(), "*");	
+			System.out.println();
+
+			// execute selected feature or do business
+			feature.doBusiness();
+			
+			// ask to continue
+		} while(askToContinue());
+		
+		// bye bye
+		showMessage("Thank you!", "+");
+		InputUtil.SC.close();
+	}
+	
+	private boolean askToContinue() {
+		System.out.println();
+		var result = InputUtil.getString("Do you want to continue?(y/others): ");
+
+		System.out.println();
+		return result.toLowerCase().equals("y");
+	}
+	
+	private AbstractFeature getSelectedFeature() {
 		for(var feature: features) {
 			feature.showMenu();
 		}
 		
-		// get menu id input
-		// get first number
-		// get second number
-		// show result
-		// ask to continue
-		
-		// bye bye
-		showMessage("Thank you!", "+");
-		
+		System.out.println();
+		var selectedId = InputUtil.getInt("Choose: ");
+		return features[selectedId - 1];
 	}
 	
 	private void showMessage(String message, String sign) {
