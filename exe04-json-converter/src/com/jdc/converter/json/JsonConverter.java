@@ -18,17 +18,19 @@ public class JsonConverter {
 	
 	private static String convert(Object object) throws IllegalArgumentException, IllegalAccessException {
 		var jsonBuilder = new StringBuilder();
-		jsonBuilder.append("{");
+		jsonBuilder.append("{\n\t");
 		
 		Class<?> clazz = object.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		
+		int counter = 0;
 		for(Field field : fields) {
 			field.setAccessible(true);
 			
 			if(field.isAnnotationPresent(JsonIgnore.class))
 				continue;
 			
+			counter ++;
 			// default key name
 			String jsonKey = field.getName();
 			
@@ -43,9 +45,13 @@ public class JsonConverter {
 					   .append("\": ")
 					   .append(serializeValue(value));
 			
+			if(counter != fields.length - 1) {
+				jsonBuilder.append(",\n\t");
+			}
+						
 		}
 		
-		jsonBuilder.append("}");
+		jsonBuilder.append("\n}");
 		
 		return jsonBuilder.toString();
 		
@@ -69,14 +75,34 @@ public class JsonConverter {
 		}
 		
 		// check array of string or character
-		if(value instanceof String[] || value instanceof Character[]) {
-			System.out.println(Arrays.toString(value instanceof String[] ? (String[]) value : (Character[]) value));
+		if(value instanceof String[] || value instanceof char[]) {
+			result = value instanceof String[] ? covertJsonStringArray((String[]) value) : covertJsonStringArray((Character[]) value);
 		}
 		
 		// check array of number or boolean
-		if(value instanceof int[] array) {
-			System.out.println(Arrays.toString(array));
-		}
+		if(value instanceof byte[] || value instanceof short[] ||
+				value instanceof int[] || value instanceof long[] ||
+				value instanceof double[] || value instanceof float[] || value instanceof boolean[])
+			result = switch(value) {
+						case byte[] byteArray -> Arrays.toString((byte[]) value);
+						case short[] shortArray -> Arrays.toString((short[]) value);
+						case int[] intArray -> Arrays.toString((int[]) value);
+						case long[] longArray -> Arrays.toString((long[]) value);
+						case float[] floatArray -> Arrays.toString((float[]) value);
+						case double[] doubleArray -> Arrays.toString((double[]) value);
+						case boolean[] boolArray -> Arrays.toString((boolean[]) value);
+						default -> throw new JsonException("Error!");
+					};
+		
+		return result;
+	}
+	
+	private static String covertJsonStringArray(Object[] array) {
+		var result = Arrays.toString(array);
+		
+		result = result.replace("[", "[\"");
+		result = result.replaceAll(", ", "\", \"");
+		result = result.replace("]", "\"]");
 		
 		return result;
 	}
