@@ -14,6 +14,7 @@ public class Student {
 	private double avg;
 	private boolean primary;
 	private String[] subjects;
+	private Character[] grades;
 
 	public String getName() {
 		return name;
@@ -69,6 +70,14 @@ public class Student {
 
 	public void setSubjects(String[] subjects) {
 		this.subjects = subjects;
+	}
+
+	public Character[] getGrades() {
+		return grades;
+	}
+
+	public void setGrades(Character[] grades) {
+		this.grades = grades;
 	}
 
 }

@@ -74,9 +74,25 @@ public class JsonConverter {
 			result = value.toString();
 		}
 		
-		// check array of string or character
-		if(value instanceof String[] || value instanceof char[]) {
-			result = value instanceof String[] ? covertJsonStringArray((String[]) value) : covertJsonStringArray((Character[]) value);
+		// check array of string
+		if(value instanceof String[] arr) {
+			result = convertJsonStringArray(arr);
+		}
+		
+		// check array of character
+		if(value instanceof Character[] || value instanceof char[]) {
+			Character[] convertedArray = null;
+			
+			if(value instanceof char[] arr) {
+				convertedArray = new Character[arr.length];
+				for(int i = 0; i < convertedArray.length; i++) {
+					convertedArray[i] = arr[i];
+				}
+			} else {
+				convertedArray = (Character[]) value;
+			}
+			
+			result = convertJsonStringArray(convertedArray);
 		}
 		
 		// check array of number or boolean
@@ -97,7 +113,7 @@ public class JsonConverter {
 		return result;
 	}
 	
-	private static String covertJsonStringArray(Object[] array) {
+	private static String convertJsonStringArray(Object[] array) {
 		var result = Arrays.toString(array);
 		
 		result = result.replace("[", "[\"");

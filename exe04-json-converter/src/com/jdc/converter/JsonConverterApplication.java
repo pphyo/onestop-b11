@@ -17,6 +17,7 @@ public class JsonConverterApplication {
 		student.setAvg(Arrays.stream(student.getMarks()).average().getAsDouble());
 		student.setPrimary(false);
 		student.setSubjects(new String[] {"Myanmar", "English", "Maths"});
+		student.setGrades(new Character[] {'D', 'D', 'C'});
 		
 		try {
 			System.out.println(JsonConverter.toJson(student));
