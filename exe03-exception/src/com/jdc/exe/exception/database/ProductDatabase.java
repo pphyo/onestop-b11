@@ -12,6 +12,10 @@ public class ProductDatabase {
 	private ProductDatabase() {
 	}
 	
+	/**
+	 * @author pphyo	
+	 * @return this
+	 */
 	public static ProductDatabase getInstance() {
 		if(null == INSTANCE) {
 			INSTANCE = new ProductDatabase();
@@ -20,6 +24,10 @@ public class ProductDatabase {
 		return INSTANCE;
 	}
 	
+	/**
+	 * 
+	 * @param product
+	 */
 	public void create(Product product) {
 		var temp = Arrays.copyOf(database, database.length + 1);
 		temp[temp.length - 1] = product;

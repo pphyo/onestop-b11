@@ -26,5 +26,6 @@
 		<module>01-autobox-unbox</module>
 		<module>02-varargs</module>
 		<module>03-enumeration</module>
+		<module>04-annotation</module>
 	</modules>
 </project>

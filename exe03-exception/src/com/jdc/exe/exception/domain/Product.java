@@ -13,9 +13,11 @@ public class Product {
 		id = IdGenerator.next();
 	}
 	
+	// "Burn, 2500, 50"
 	public Product(String line) {
 		this();
 		var array = line.split("\\,");
+		// ["Burn", " 2500", " 50"]
 		try {
 			name = array[0];
 			price = Double.parseDouble(array[1].strip());
