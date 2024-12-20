@@ -10,7 +10,7 @@ import com.jdc.converter.domain.JsonIgnore;
 import com.jdc.converter.domain.JsonKey;
 
 public class JsonConverter {
-	
+
 	public static String toJson(Object object) throws IllegalArgumentException, IllegalAccessException {
 		check(object);
 		return convert(object);
