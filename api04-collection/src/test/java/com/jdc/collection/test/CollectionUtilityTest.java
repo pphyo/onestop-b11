@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.jdc.collection.NameAscComparator;
 import com.jdc.collection.NoteBook;
 
 public class CollectionUtilityTest {
@@ -41,7 +40,7 @@ public class CollectionUtilityTest {
 		Collections.sort(list);
 		System.out.println(list);
 		
-		Collections.sort(list, new NameAscComparator());
+		Collections.sort(list, (obj1, obj2) -> (int)(obj1.getPrice() - obj2.getPrice()));
 		System.out.println(list);
 	}
 
