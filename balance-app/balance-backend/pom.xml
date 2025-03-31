@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jdc.balance</groupId>
+	<artifactId>balance-backend</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	
+	<name>Balance Application</name>
+	<description>Manage easily income and expense</description>
+	
+	<properties>
+		<java.version>21</java.version>
+		<hibernate.version>6.6.12.Final</hibernate.version>
+	</properties>
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.4</version>
+		<relativePath />
+	</parent>
+	
+	<dependencies>
+	
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+	
+	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+		
+		</dependencies>
+	</dependencyManagement>
+	
+	<build>
+		<plugins>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<release>${java.version}</release>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+	</build>
+	
+	<modules>
+		<module>balance-core</module>
+		<module>balance-service</module>
+		<module>balance-repository</module>
+		<module>balance-app</module>
+	</modules>
+</project>
