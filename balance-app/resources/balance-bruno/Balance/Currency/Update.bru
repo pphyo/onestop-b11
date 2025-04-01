@@ -1,0 +1,22 @@
+meta {
+  name: Update
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_ENDPOINT}}/currencies/3
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Japan Yen",
+    "code": "JPY"
+  }
+}
