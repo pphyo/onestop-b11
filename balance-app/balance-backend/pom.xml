@@ -33,6 +33,30 @@
 	<dependencyManagement>
 		<dependencies>
 		
+			<dependency>
+				<groupId>com.jdc.balance</groupId>
+				<artifactId>balance-app</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.jdc.balance</groupId>
+				<artifactId>balance-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.jdc.balance</groupId>
+				<artifactId>balance-repository</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.jdc.balance</groupId>
+				<artifactId>balance-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
 		</dependencies>
 	</dependencyManagement>
 	
