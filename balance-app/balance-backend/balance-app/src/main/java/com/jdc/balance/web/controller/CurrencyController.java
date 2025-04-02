@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jdc.balance.core.payload.BalancePayload;
 import com.jdc.balance.core.payload.input.CurrencyInput;
 import com.jdc.balance.core.payload.output.CurrencyOutput;
+import com.jdc.balance.core.payload.param.CurrencyParam;
 import com.jdc.balance.service.entity.CurrencyService;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class CurrencyController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Boolean> deleteCurrency(Long id) {
+	public ResponseEntity<Boolean> deleteCurrency(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(
 				currencyService.delete(id),
 				HttpStatus.OK);
@@ -58,9 +58,9 @@ public class CurrencyController {
 	
 	@GetMapping
 	public BalancePayload<List<CurrencyOutput>> searchCurrency(
-			@RequestParam String name, @RequestParam String code
+				CurrencyParam param
 			) {
-		return BalancePayload.success(currencyService.search(name, code));
+		return BalancePayload.success(currencyService.search(param));
 	}
 
 }
