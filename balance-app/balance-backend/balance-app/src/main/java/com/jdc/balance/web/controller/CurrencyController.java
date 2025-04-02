@@ -56,6 +56,11 @@ public class CurrencyController {
 				HttpStatus.OK);
 	}
 	
+	@GetMapping("{id}")
+	public BalancePayload<CurrencyOutput> searchCurrencyById(@PathVariable Long id) {
+		return BalancePayload.success(currencyService.searchById(id));
+	}
+	
 	@GetMapping
 	public BalancePayload<List<CurrencyOutput>> searchCurrency(
 				CurrencyParam param

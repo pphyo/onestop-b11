@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -32,10 +32,10 @@ public class SettingEntity implements Serializable {
 	@Column(name = "currency_position", nullable = false)
 	private CurrencyPosition currencyPosition;
 
-	@ManyToOne(optional = false)
+	@OneToOne(optional = false)
 	private UserEntity user;
 
-	@ManyToOne(optional = false)
+	@OneToOne(optional = false)
 	private CurrencyEntity currency;
 
 }

@@ -6,12 +6,12 @@ public record CategoryOutput(
 			Long id,
 			String name,
 			Boolean icome,
-			String icon
+			IconOutput icon
 		) {
 
 	public static CategoryOutput from(CategoryEntity entity) {
 		return new CategoryOutput(entity.getId(), entity.getName(), 
-				entity.getIncome(), entity.getIcon());
+				entity.getIncome(), IconOutput.from(entity.getIcon()));
 	}
 
 }

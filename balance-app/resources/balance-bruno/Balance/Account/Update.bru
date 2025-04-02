@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: {{BASE_ENDPOINT}}/currencies/3
+  url: {{BASE_ENDPOINT}}/accounts/4
   body: json
   auth: inherit
 }
@@ -16,7 +16,8 @@ headers {
 
 body:json {
   {
-    "name": "American Dollar",
-    "code": "USD"
+    "name": "KPay",
+    "amount": 245000,
+    "iconId": null
   }
 }

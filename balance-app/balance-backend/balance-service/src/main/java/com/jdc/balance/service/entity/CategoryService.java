@@ -13,6 +13,7 @@ import com.jdc.balance.core.payload.input.CategoryInput;
 import com.jdc.balance.core.payload.output.CategoryOutput;
 import com.jdc.balance.core.payload.param.CategoryParam;
 import com.jdc.balance.repository.entity.CategoryRepository;
+import com.jdc.balance.repository.entity.IconRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -24,16 +25,22 @@ import lombok.RequiredArgsConstructor;
 public class CategoryService {
 
 	private CategoryRepository categoryRepo;
+	private IconRepository iconRepo;
 
 	public CategoryOutput save(CategoryInput input) {
-		return CategoryOutput.from(categoryRepo.save(input.entity()));
+		return CategoryOutput.from(
+				categoryRepo.save(
+						input.entity(id -> 
+						iconRepo.findById(id)
+						.orElse(null))));
 	}
 
 	public CategoryOutput update(Long id, CategoryInput input) {
 		var category = categoryRepo.findById(id).map(c -> {
 			c.setName(input.name());
 			c.setIncome(input.income());
-			c.setIcon(input.icon());
+			c.setIcon(iconRepo.findById(id)
+					.orElseThrow(() -> notFoundWithId("icon", id)));
 			return c;
 		}).orElseThrow(() -> notFoundWithId("category", id));
 		return CategoryOutput.from(category);

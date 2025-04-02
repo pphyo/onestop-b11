@@ -1,6 +1,9 @@
 package com.jdc.balance.core.payload.input;
 
+import java.util.function.Function;
+
 import com.jdc.balance.core.model.entity.CategoryEntity;
+import com.jdc.balance.core.model.entity.IconEntity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,14 +13,14 @@ public record CategoryInput(
 			String name,
 			@NotNull(message = "Category income required!")
 			Boolean income,
-			String icon
+			Long iconId
 		) {
 
-	public CategoryEntity entity() {
+	public CategoryEntity entity(Function<Long, IconEntity> iconMapper) {
 		var entity = new CategoryEntity();
 		entity.setName(name);
 		entity.setIncome(income);
-		entity.setIcon(icon);
+		entity.setIcon(iconMapper.apply(iconId));
 		return entity;
 	}
 

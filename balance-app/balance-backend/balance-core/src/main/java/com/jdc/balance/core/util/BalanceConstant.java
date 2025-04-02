@@ -7,6 +7,7 @@ public interface BalanceConstant {
 		String BUDGET = "BUDGET";
 		String CATEGORY = "CATEGORY";
 		String CURRENCY = "CURRENCY";
+		String ICON = "ICON";
 		String SETTING = "SETTING";
 		String TRANSACTION = "TRANSACTION";
 		String USER = "USER";

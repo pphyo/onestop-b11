@@ -16,23 +16,17 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Entity(name = BalanceConstant.EntityName.USER)
-@Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "users")
-public class UserEntity extends AuditMetadataEntity implements Serializable {
-
+@Entity(name = BalanceConstant.EntityName.ICON)
+@Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "icons")
+public class IconEntity extends AuditMetadataEntity implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Column(nullable = false, length = 150)
-	private String username;
-
+	
 	@Column(nullable = false, unique = true)
-	private String email;
-
-	@Column(nullable = false)
-	private String password;
+	private String path;
 
 }

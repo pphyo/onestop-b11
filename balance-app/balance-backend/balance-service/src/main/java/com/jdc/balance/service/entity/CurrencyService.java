@@ -46,6 +46,11 @@ public class CurrencyService {
 		currencyRepo.deleteById(id);
 		return currencyRepo.findById(id).isEmpty();
 	}
+	
+	@Transactional(readOnly = true)
+	public CurrencyOutput searchById(Long id) {
+		return CurrencyOutput.from(currencyRepo.findById(id).orElseThrow(() -> notFoundWithId("currency", id)));
+	}
 
 	@Transactional(readOnly = true)
 	public List<CurrencyOutput> search(CurrencyParam param) {

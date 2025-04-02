@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -34,9 +35,10 @@ public class AccountEntity implements Serializable {
 	@Column(name = "initial_amount", nullable = false, precision = 15, scale = 2)
 	private BigDecimal initialAmount;
 
-	private String icon;
+	@OneToOne
+	private IconEntity icon;
 
-	@ManyToOne(optional = false)
+	@ManyToOne
 	private UserEntity user;
 
 	@OneToMany(mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
