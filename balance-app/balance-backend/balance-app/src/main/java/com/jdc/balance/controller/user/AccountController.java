@@ -1,4 +1,4 @@
-package com.jdc.balance.web.controller;
+package com.jdc.balance.controller.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import com.jdc.balance.service.entity.AccountService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("accounts")
+@RequestMapping("user/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 	

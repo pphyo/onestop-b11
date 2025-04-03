@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jdc.balance.core.payload.input.AccountInput;
 import com.jdc.balance.core.payload.output.AccountOutput;
-import com.jdc.balance.repository.entity.AccountRepoistory;
+import com.jdc.balance.repository.entity.AccountRepository;
 import com.jdc.balance.repository.entity.IconRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AccountService {
 	
-	private final AccountRepoistory accountRepo;
+	private final AccountRepository accountRepo;
 	private final IconRepository iconRepo;
 	
 	public AccountOutput save(AccountInput input) {

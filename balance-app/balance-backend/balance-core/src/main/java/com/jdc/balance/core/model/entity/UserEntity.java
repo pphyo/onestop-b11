@@ -27,12 +27,15 @@ public class UserEntity extends AuditMetadataEntity implements Serializable {
 	private Long id;
 
 	@Column(nullable = false, length = 150)
-	private String username;
+	private String name;
 
 	@Column(nullable = false, unique = true)
-	private String email;
+	private String username;
 
 	@Column(nullable = false)
 	private String password;
+	
+	@Column(nullable = false)
+	private Boolean admin;
 
 }

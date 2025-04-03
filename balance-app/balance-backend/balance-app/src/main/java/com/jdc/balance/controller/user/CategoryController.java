@@ -1,4 +1,4 @@
-package com.jdc.balance.web.controller;
+package com.jdc.balance.controller.user;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import com.jdc.balance.service.entity.CategoryService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("categories")
+@RequestMapping("user/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 	

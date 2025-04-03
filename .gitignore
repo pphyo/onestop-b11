@@ -8,3 +8,4 @@
 **/node_modules
 **/demo
 .metadata
+**/*token.properties
