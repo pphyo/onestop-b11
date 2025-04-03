@@ -2,6 +2,7 @@ package com.jdc.balance;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 import com.jdc.balance.security.BalanceSecurityExceptionResolver;
 import com.jdc.balance.security.JwtTokenAuthenticationFilter;
@@ -18,8 +19,9 @@ import com.jdc.balance.security.JwtTokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
+@PropertySource("/application.token.properties")
+@RequiredArgsConstructor
 public class BalanceSecurityConfiguration {
 	
 	private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
@@ -40,13 +42,13 @@ public class BalanceSecurityConfiguration {
 		
 		http.authorizeHttpRequests(
 					request -> {
-						request.requestMatchers("/balance/api/v1/auth/signup").permitAll();
-						request.requestMatchers("/balance/api/v1/auth/login").permitAll();
-						request.requestMatchers("/balance/api/v1/admin/**").hasAuthority("Admin");
-						request.requestMatchers("/balance/api/v1/user/**").hasAuthority("User");
+						request.requestMatchers("/auth/**").permitAll();
+						request.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+						request.requestMatchers("/user/**").hasAuthority("ROLE_USER");
+						request.anyRequest().authenticated();
 					});
 		
-		http.addFilterAfter(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterAfter(jwtTokenAuthenticationFilter, ExceptionTranslationFilter.class);
 		
 		http.exceptionHandling(exception -> {
 			exception.accessDeniedHandler(securityExceptionResolver);

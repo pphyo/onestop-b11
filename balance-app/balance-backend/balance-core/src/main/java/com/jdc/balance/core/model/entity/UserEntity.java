@@ -1,6 +1,12 @@
 package com.jdc.balance.core.model.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.jdc.balance.core.model.entity.audit.AuditMetadataEntity;
 import com.jdc.balance.core.util.BalanceConstant;
@@ -18,7 +24,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.USER)
 @Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "users")
-public class UserEntity extends AuditMetadataEntity implements Serializable {
+public class UserEntity extends AuditMetadataEntity implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,5 +43,13 @@ public class UserEntity extends AuditMetadataEntity implements Serializable {
 	
 	@Column(nullable = false)
 	private Boolean admin;
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if(admin) {
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		}
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
 
 }

@@ -29,23 +29,41 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 	
 	@PostConstruct
 	public void construct() {
-		requestMatcher = new AntPathRequestMatcher("/balance/api/v1/auth/**");
+		requestMatcher = new AntPathRequestMatcher("/auth/**");
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		String path = request.getContextPath();
+		String path = request.getRequestURI();
 		log.debug("Request URL: {}", path);
 		
-		if(!requestMatcher.matches(request)) {
-			var token = request.getHeader(HttpHeaders.AUTHORIZATION);
-			
-			var authentication = tokenProvider.parse(token, TokenType.Access);
-			
-			if(null != authentication) {
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+		if(requestMatcher.matches(request)) {
+			log.debug("Skipping authentication for auth endpoint: {}", path);
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		var token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		log.debug("Authorization Header: {}", token);
+		
+		if (token != null && token.startsWith("Bearer ")) {
+		
+			try {
+				if(token.startsWith("Bearer")) {
+					token = token.substring(7);
+				}
+				
+				var authentication = tokenProvider.parse(token, TokenType.Access);
+				if(null != authentication) {
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+					log.debug("Authentication set for user: {}", authentication.getName());
+				}
+			} catch (Exception e) {
+				log.error("Failed to parse token: {}", e.getMessage());
+				SecurityContextHolder.clearContext();
+				e.printStackTrace();
 			}
 		}
 		
