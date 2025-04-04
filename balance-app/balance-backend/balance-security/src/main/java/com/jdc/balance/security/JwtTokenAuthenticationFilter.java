@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jdc.balance.security.JwtTokenProvider.TokenType;
@@ -48,11 +49,11 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 		var token = request.getHeader(HttpHeaders.AUTHORIZATION);
 		log.debug("Authorization Header: {}", token);
 		
-		if (token != null && token.startsWith("Bearer ")) {
+		if (StringUtils.hasLength(token)) {
 		
 			try {
-				if(token.startsWith("Bearer")) {
-					token = token.substring(7);
+				if(StringUtils.containsWhitespace(token)) {
+					token = token.substring(token.lastIndexOf(" ") + 1);
 				}
 				
 				var authentication = tokenProvider.parse(token, TokenType.Access);

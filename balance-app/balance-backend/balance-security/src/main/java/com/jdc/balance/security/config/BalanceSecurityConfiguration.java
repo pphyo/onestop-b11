@@ -1,4 +1,4 @@
-package com.jdc.balance;
+package com.jdc.balance.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.jdc.balance.security.BalanceSecurityExceptionResolver;
 import com.jdc.balance.security.JwtTokenAuthenticationFilter;
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource("/application.token.properties")
+@PropertySource("classpath:application.token.properties")
 @RequiredArgsConstructor
 public class BalanceSecurityConfiguration {
 	
@@ -48,7 +48,7 @@ public class BalanceSecurityConfiguration {
 						request.anyRequest().authenticated();
 					});
 		
-		http.addFilterAfter(jwtTokenAuthenticationFilter, ExceptionTranslationFilter.class);
+		http.addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		http.exceptionHandling(exception -> {
 			exception.accessDeniedHandler(securityExceptionResolver);

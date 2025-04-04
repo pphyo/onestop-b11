@@ -1,0 +1,27 @@
+meta {
+  name: User Log In
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE_ENDPOINT}}/auth/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "pphyo.dev@gmail.com",
+    "password": "pyaephyo"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("accessToken", res.body.accessToken);
+  bru.setEnvVar("refreshToken ", res.body.refreshToken);
+}

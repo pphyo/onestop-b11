@@ -10,8 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 public record SignUpInput(
 			@NotBlank(message = "Name required!")
 			String name,
-			@NotBlank(message = "Username required!")
-			@Email(message = "Username must be email!")
+			@NotBlank(message = "Email required!")
+			@Email(message = "Invalid email!")
 			String username,
 			@NotBlank(message = "Password required!")
 			String password

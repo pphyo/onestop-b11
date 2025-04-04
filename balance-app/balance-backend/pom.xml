@@ -54,6 +54,12 @@
 			
 			<dependency>
 				<groupId>com.jdc.balance</groupId>
+				<artifactId>balance-security</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.jdc.balance</groupId>
 				<artifactId>balance-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -86,5 +92,6 @@
 		<module>balance-service</module>
 		<module>balance-repository</module>
 		<module>balance-app</module>
+		<module>balance-security</module>
 	</modules>
 </project>

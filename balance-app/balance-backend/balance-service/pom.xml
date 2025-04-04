@@ -8,10 +8,10 @@
 	<artifactId>balance-service</artifactId>
 	
 	<dependencies>
-	
+		
 		<dependency>
 			<groupId>com.jdc.balance</groupId>
-			<artifactId>balance-repository</artifactId>
+			<artifactId>balance-security</artifactId>
 		</dependency>
 		
 		<dependency>

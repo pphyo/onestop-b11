@@ -1,4 +1,4 @@
-package com.jdc.balance.controller.user;
+package com.jdc.balance.controller.admin;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("user/currencies")
+@RequestMapping("admin/currencies")
 public class CurrencyController {
 	
 	private final CurrencyService currencyService;

@@ -18,11 +18,11 @@ public class BalanceUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepo.findOneByUsername(username)
+		return userRepo.findByUsername(username)
 					.map(userEntity -> User.builder()
 										.username(username)
 										.password(userEntity.getPassword())
-										.authorities(userEntity.getAdmin() ? "Admin" : "User")
+										.authorities(userEntity.getAdmin() ? "ROLE_ADMIN" : "ROLE_USER")
 										.build()).orElseThrow(() -> new UsernameNotFoundException(username));
 	}
 

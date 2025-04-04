@@ -5,19 +5,20 @@ meta {
 }
 
 post {
-  url: {{BASE_ENDPOINT}}/accounts
+  url: {{BASE_ENDPOINT}}/user/accounts
   body: json
   auth: inherit
 }
 
 headers {
   Content-Type: application/json
+  Authorization: {{accessToken}}
 }
 
 body:json {
   {
-    "name": "OK$",
-    "amount": 5000,
+    "name": "Cash",
+    "amount": 200000,
     "iconId": null
   }
 }

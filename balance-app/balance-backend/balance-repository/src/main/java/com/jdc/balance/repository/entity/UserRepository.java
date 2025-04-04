@@ -7,6 +7,6 @@ import com.jdc.balance.repository.BaseRepository;
 
 public interface UserRepository extends BaseRepository<UserEntity, Long> {
 
-	Optional<UserEntity> findOneByUsername(String username);
+	Optional<UserEntity> findByUsername(String username);
 	
 }

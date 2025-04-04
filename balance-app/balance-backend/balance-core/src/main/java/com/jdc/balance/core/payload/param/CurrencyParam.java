@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.util.StringUtils;
 
 import com.jdc.balance.core.model.entity.CurrencyEntity;
+import com.jdc.balance.core.model.entity.CurrencyEntity_;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
@@ -18,12 +19,12 @@ public record CurrencyParam(
 		var predicates = new ArrayList<Predicate>();
 		
 		if(StringUtils.hasLength(name)) {
-			var namePredicate = cb.like(cb.lower(root.get("name")), name.toLowerCase().concat("%"));
+			var namePredicate = cb.like(cb.lower(root.get(CurrencyEntity_.NAME)), name.toLowerCase().concat("%"));
 			predicates.add(namePredicate);
 		}
 		
 		if(StringUtils.hasLength(code)) {
-			var codePredicate = cb.like(cb.lower(root.get("code")), code.toLowerCase().concat("%"));
+			var codePredicate = cb.like(cb.lower(root.get(CurrencyEntity_.CODE)), code.toLowerCase().concat("%"));
 			predicates.add(codePredicate);
 		}
 		

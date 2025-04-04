@@ -1,0 +1,27 @@
+meta {
+  name: Admin Log In
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BASE_ENDPOINT}}/auth/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "username": "admin@gmail.com",
+    "password": "admin@123"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("accessToken", res.body.accessToken);
+  bru.setEnvVar("refreshToken", res.body.refreshToken);
+}

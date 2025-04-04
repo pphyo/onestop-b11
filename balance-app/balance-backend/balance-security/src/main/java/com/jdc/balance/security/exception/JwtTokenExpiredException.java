@@ -1,4 +1,4 @@
-package com.jdc.balance.core.exception;
+package com.jdc.balance.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

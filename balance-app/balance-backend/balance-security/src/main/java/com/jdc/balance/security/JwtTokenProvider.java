@@ -12,9 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.jdc.balance.core.exception.JwtTokenExpiredException;
-import com.jdc.balance.core.exception.JwtTokenInvalidatedException;
-import com.jdc.balance.core.util.BalanceTokenProperties;
+import com.jdc.balance.security.exception.JwtTokenExpiredException;
+import com.jdc.balance.security.exception.JwtTokenInvalidException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 	
-	private BalanceTokenProperties tokenProperties;
+	private final BalanceTokenProperties tokenProperties;
 	private final SecretKey key = Jwts.SIG.HS512.key().build();
 	
 	public Authentication parse(String token, TokenType tokenType) {
@@ -36,7 +35,7 @@ public class JwtTokenProvider {
 		log.debug("Token string: {}", token);
 		try {
 			if(!StringUtils.hasLength(token)) {
-				throw new JwtTokenInvalidatedException("Invalid Token");
+				throw new JwtTokenInvalidException("Invalid Token");
 			}
 			
 			Claims claims = Jwts.parser()
@@ -49,7 +48,7 @@ public class JwtTokenProvider {
 			String type = claims.get("type", String.class);
 			
 			if(!type.equals(tokenType.name())) {
-				throw new JwtTokenInvalidatedException("Invalid Token type: expected %s, but got %s".formatted(tokenType, type));
+				throw new JwtTokenInvalidException("Invalid Token type: expected %s, but got %s".formatted(tokenType, type));
 			}
 			
 			String username = claims.getSubject();
@@ -63,7 +62,7 @@ public class JwtTokenProvider {
 		} catch(JwtException e) {
 			log.error("Token type: {}", tokenType);
 			log.error("Token string: {}", token);
-			throw new JwtTokenInvalidatedException(e.getMessage(), e);
+			throw new JwtTokenInvalidException(e.getMessage(), e);
 		}
 
 	}
