@@ -3,7 +3,7 @@ import { Outlet } from "react-router"
 
 export const PublicLayout = () => {
   return (
-    <main className={cn("min-h-screen")}>
+    <main className={cn("min-h-screen flex justify-center items-center")}>
         <Outlet></Outlet>
     </main>
   )

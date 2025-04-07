@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-public class AdminInitializationConfiguration {
+public class BalanceConfigurationForAdminUser {
 	
 	private final UserRepository userRepo;
 	private final PasswordEncoder passwordEncoder;
