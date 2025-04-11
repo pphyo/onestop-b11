@@ -24,7 +24,7 @@ public class AuthController {
 	
 	private final AuthService authService;
 	
-	@PostMapping("login")
+	@PostMapping("signin")
 	public ResponseEntity<AuthOutput> login(
 			@Validated @RequestBody LogInInput input, BindingResult result
 			) {

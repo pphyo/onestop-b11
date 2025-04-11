@@ -1,8 +1,8 @@
 import axiosInstance from "@/axios/axios-instance";
 import { SignInDto, SignUpDto, UserDto } from "../dto/auth.dto";
-import { BASE_API, ENDPOINT, HEADER_JSON } from "@/lib/consts.type";
+import { BASE_API, ENDPOINT } from "@/lib/consts.type";
 
-const AUTH_API: ENDPOINT = `${BASE_API}/auth/`;
+const AUTH_API: ENDPOINT = `${BASE_API}/auth`;
 
 class AuthService {
 
@@ -19,13 +19,13 @@ class AuthService {
     }
 
     async signIn(dto: SignInDto): Promise<UserDto> {
-        const resp: UserDto = await axiosInstance.post(`${AUTH_API}/signin`, dto, {headers: HEADER_JSON});
+        const resp: UserDto = await axiosInstance.post(`${AUTH_API}/signin`, dto).then(res => res.data);
         localStorage.setItem(this.USER_KEY, JSON.stringify(resp));
         return resp;
     }
 
     async signUp(dto: SignUpDto): Promise<boolean> {
-        const resp: boolean = await axiosInstance.post(`${AUTH_API}/signup`, dto, {headers: HEADER_JSON});
+        const resp: boolean = await axiosInstance.post(`${AUTH_API}/signup`, dto);
         return resp;
     }
 

@@ -3,10 +3,11 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { BalanceCard } from "@/components/widget/BalanceCard";
 import { BalanceFormControl } from "@/components/widget/BalanceFormControl";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 
 const SignInFormSchema = z.object({
@@ -17,6 +18,7 @@ const SignInFormSchema = z.object({
 type SignInFormData = z.infer<typeof SignInFormSchema>;
 
 export const SignIn = () => {
+    const {user, signIn} = useAuth();
 
     const form = useForm<SignInFormData>({
         resolver: zodResolver(SignInFormSchema),
@@ -26,8 +28,13 @@ export const SignIn = () => {
         }
     });
 
-    const handleSubmitSignInForm = (data: SignInFormData) => {
-        console.log(data);
+    const navigate = useNavigate();
+
+    const handleSubmitSignInForm = async (data: SignInFormData) => {
+        signIn(data);
+        if(user) {
+            navigate(`/balance/app/${user.admin ? "admin" : "user"}`);
+        }
     };
 
   return (

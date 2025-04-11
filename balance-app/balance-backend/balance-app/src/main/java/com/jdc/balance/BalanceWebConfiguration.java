@@ -12,7 +12,7 @@ public class BalanceWebConfiguration implements WebMvcConfigurer {
 		registry.addMapping("/**")
 				.allowedHeaders("*")
 				.allowedMethods("POST", "PUT", "GET", "DELETE", "PATCH")
-				.allowedOrigins("https://localhost:5137")
+				.allowedOrigins("http://localhost:5173")
 				.exposedHeaders("*");
 	}
 

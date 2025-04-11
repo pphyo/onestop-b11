@@ -1,7 +1,12 @@
+import AuthProvider from "./hooks/AuthProvider"
 import { BalanceRouteProvider } from "./routes/BalanceRouteProvider"
 
 function App() {
-  return <BalanceRouteProvider />
+  return (
+    <AuthProvider>
+      <BalanceRouteProvider />
+    </AuthProvider>
+  )
 }
 
 export default App
