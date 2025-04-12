@@ -1,82 +1,61 @@
 package com.jdc.balance.handler;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jdc.balance.core.exception.BalanceBusinessException;
 import com.jdc.balance.core.exception.BalanceValidationException;
+import com.jdc.balance.core.payload.BalanceErrorPayload;
 import com.jdc.balance.security.exception.JwtTokenExpiredException;
 import com.jdc.balance.security.exception.JwtTokenInvalidException;
 
+
 @RestControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
-	private final String MAP_KEY = "error";
-	private static final Map<Class<? extends AuthenticationException>, String> errors = new HashMap<>();
-	
-	static {
-		errors.put(BadCredentialsException.class, "Wrong password!");
-		errors.put(DisabledException.class, "Account is temporarily disabled.Please contact admin!");
+	@ExceptionHandler
+	ResponseEntity<BalanceErrorPayload> handleValidationException(BalanceValidationException e) {
+		return handle(BalanceErrorPayload.error("Invalid Input", e.getMessages()), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(BalanceValidationException e) {
-		return handle(Map.of(MAP_KEY, e.getMessages()), HttpStatus.BAD_REQUEST);
+	ResponseEntity<BalanceErrorPayload> handleBusinessException(BalanceBusinessException e) {
+		return handle(BalanceErrorPayload.error("Business Error", e.getMessages()), HttpStatus.BAD_REQUEST);
 	}
-	
-	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(BalanceBusinessException e) {
-		return handle(Map.of(MAP_KEY, e.getMessages()), HttpStatus.BAD_REQUEST);
-	}
-	
-	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(AuthenticationException e) {
-		String result = switch(e) {
-			case BadCredentialsException exp -> errors.get(BadCredentialsException.class);
-			case DisabledException exp -> errors.get(DisabledException.class);
-			default -> e.getMessage();
-		};
 
-		return handle(Map.of(MAP_KEY, List.of(result)), HttpStatus.UNAUTHORIZED);
+	@ExceptionHandler
+	ResponseEntity<BalanceErrorPayload> handleAccessDeniedException(AccessDeniedException e) {
+		return handle(BalanceErrorPayload.error("Access Denied", List.of("You have no permission to perform this operation.")), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(AccessDeniedException e) {
-		return handle(Map.of(MAP_KEY, List.of(e instanceof AccessDeniedException ? "You don't have authority to access this." : e.getMessage())), HttpStatus.UNAUTHORIZED);
+	ResponseEntity<BalanceErrorPayload> handleAuthenticationException(AuthenticationException e) {
+		var error = switch (e) {
+			case UsernameNotFoundException ex -> BalanceErrorPayload.error("Email Not Registered", List.of("No user found with this email: %s.".formatted(ex.getMessage())));
+			case BadCredentialsException ex -> BalanceErrorPayload.error("Wrong Password", List.of("Password is wrong. Please type valid password."));
+			case JwtTokenExpiredException ex -> BalanceErrorPayload.error("Session Expired", List.of("Your session is timed out. Please refresh or sign in to continue."));
+			case JwtTokenInvalidException ex -> BalanceErrorPayload.error("Session Invalid", List.of("Your session is invalid. Please sign in to continue."));
+			default -> throw new BalanceBusinessException("Unexpected error");
+		};
+		return handle(error, HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(JwtTokenExpiredException e) {
-		return handle(Map.of(MAP_KEY, List.of(e.getMessage())), HttpStatus.REQUEST_TIMEOUT);
-	}
-	
-	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(JwtTokenInvalidException e) {
-		return handle(Map.of(MAP_KEY, List.of(e.getMessage())), HttpStatus.UNAUTHORIZED);
-	}
-	
-	@ExceptionHandler
-	ResponseEntity<Map<String, List<String>>> handle(Exception e) {
+	ResponseEntity<BalanceErrorPayload> handleInternal(Exception e) {
 		e.printStackTrace();
-		return handle(Map.of(MAP_KEY, List.of(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
+		return handle(BalanceErrorPayload.error("Internal Server Error", List.of(e.getMessage())), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 		
-	private <T> ResponseEntity<T> handle(T message, HttpStatus code) {
-		return ResponseEntity.status(code).body(message);
+	private ResponseEntity<BalanceErrorPayload> handle(BalanceErrorPayload payload, HttpStatus status) {
+		return ResponseEntity.status(status).body(payload);
 	}
-	
+
 }
