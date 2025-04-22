@@ -3,6 +3,8 @@ package com.jdc.balance.core.payload.param;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.StringUtils;
+
 import com.jdc.balance.core.model.entity.IconEntity;
 import com.jdc.balance.core.model.entity.IconEntity_;
 import com.jdc.balance.core.model.entity.consts.IconFilterType;
@@ -11,19 +13,28 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-public record IconParam(Boolean account, IconFilterType filter) {
+public record IconParam(String name, IconFilterType filter, Boolean account) {
 
 	public Predicate where(CriteriaBuilder cb, Root<IconEntity> root) {
 		List<Predicate> predicates = new ArrayList<>();
 		
+		if(StringUtils.hasText(name)) {
+			predicates.add(cb.like(cb.lower(root.get(IconEntity_.name)), name.toLowerCase().concat("%")));
+		}
+		
 		if(null != account) {
-			var accountPred = cb.equal(root.get(IconEntity_.account), account);
-			predicates.add(accountPred);
+			predicates.add(cb.equal(root.get(IconEntity_.account), account));
 		}
 		
 		if(null != filter) {
-			var incomePred = cb.equal(root.get(IconEntity_.filter), filter);
-			predicates.add(incomePred);
+			if(!filter.equals(IconFilterType.Both)) {
+				predicates.add(cb.or(
+						cb.equal(root.get(IconEntity_.filter), IconFilterType.Both),
+						cb.equal(root.get(IconEntity_.filter), filter)
+					));
+			} else {
+				predicates.add(cb.equal(root.get(IconEntity_.filter), filter));
+			}
 		}
 		
 		return cb.and(predicates.toArray(i -> new Predicate[i]));

@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryController {
 	
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
 	
 	@PostMapping
 	public ResponseEntity<CategoryOutput> createCategory(

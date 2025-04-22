@@ -5,7 +5,7 @@ import com.jdc.balance.core.model.entity.CategoryEntity;
 public record CategoryOutput(
 			Long id,
 			String name,
-			Boolean icome,
+			Boolean income,
 			IconOutput icon
 		) {
 

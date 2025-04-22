@@ -4,7 +4,7 @@ import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from '
 type BalanceFormControlProps = {
     children: React.ReactNode;
     label: string;
-    labelFor: string;
+    labelFor?: string;
     description?: string;
 }
 

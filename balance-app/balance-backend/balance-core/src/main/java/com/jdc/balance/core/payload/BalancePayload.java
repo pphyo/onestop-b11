@@ -12,8 +12,4 @@ public record BalancePayload<T>(
 		return new BalancePayload<T>(true, LocalDateTime.now(), payload);
 	}
 	
-	public static <T> BalancePayload<T> error(T payload) {
-		return new BalancePayload<T>(false, LocalDateTime.now(), payload);
-	}
-
 }

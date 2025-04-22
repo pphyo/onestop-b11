@@ -10,7 +10,7 @@ type BalancePopoverProps = {
 const BalancePopover: React.FC<BalancePopoverProps> = ({trigger, children}) => {
   return (
     <Popover>
-        <PopoverTrigger>
+        <PopoverTrigger asChild>
             {trigger}
         </PopoverTrigger>
         <PopoverContent side="left" className={cn("w-[250px] flex flex-col gap-4")}>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.jdc.balance.core.payload.output.CategoryOutput;
 import com.jdc.balance.core.payload.param.CategoryParam;
 import com.jdc.balance.repository.entity.CategoryRepository;
 import com.jdc.balance.repository.entity.IconRepository;
+import com.jdc.balance.repository.entity.UserRepository;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -25,15 +27,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService {
 
-	private CategoryRepository categoryRepo;
-	private IconRepository iconRepo;
+	private final CategoryRepository categoryRepo;
+	private final IconRepository iconRepo;
+	private final UserRepository userRepo;
 
 	public CategoryOutput save(CategoryInput input) {
+		var username = SecurityContextHolder.getContext().getAuthentication().getName();
+		var user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+		
 		return CategoryOutput.from(
 				categoryRepo.save(
 						input.entity(id -> 
 						iconRepo.findById(id)
-						.orElse(null))));
+						.orElse(null), user)));
 	}
 
 	public CategoryOutput update(Long id, CategoryInput input) {
