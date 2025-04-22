@@ -32,8 +32,8 @@ public class AccountEntity implements Serializable {
 	@Column(nullable = false, length = 150)
 	private String name;
 
-	@Column(name = "initial_amount", nullable = false, precision = 15, scale = 2)
-	private BigDecimal initialAmount;
+	@Column(nullable = false, precision = 15, scale = 2)
+	private BigDecimal amount;
 
 	@OneToOne
 	private IconEntity icon;
@@ -44,4 +44,6 @@ public class AccountEntity implements Serializable {
 	@OneToMany(mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
 	private List<TransactionEntity> transactions;
 
+	@OneToMany(mappedBy = "targetAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+	private List<TransactionEntity> incomingTransactions;
 }

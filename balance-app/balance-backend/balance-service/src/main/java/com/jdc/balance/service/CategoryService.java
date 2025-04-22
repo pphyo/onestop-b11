@@ -1,10 +1,11 @@
-package com.jdc.balance.service.entity;
+package com.jdc.balance.service;
 
 import static com.jdc.balance.core.util.BalanceUtil.notFoundWithId;
 
 import java.util.List;
 import java.util.function.Function;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,12 +63,14 @@ public class CategoryService {
 
 	@Transactional(readOnly = true)
 	public List<CategoryOutput> search(CategoryParam param) {
+		var username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
 		Function<CriteriaBuilder, CriteriaQuery<CategoryEntity>> query = cb -> {
 			var cq = cb.createQuery(CategoryEntity.class);
 			var root = cq.from(CategoryEntity.class);
 
 			cq.select(root);
-			cq.where(param.where(cb, root));
+			cq.where(param.where(cb, root, username));
 			cq.orderBy(cb.desc(root.get("id")));
 
 			return cq;

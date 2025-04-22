@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			case BadCredentialsException ex -> BalanceErrorPayload.error("Wrong Password", List.of("Password is wrong. Please type valid password."));
 			case JwtTokenExpiredException ex -> BalanceErrorPayload.error("Session Expired", List.of("Your session is timed out. Please refresh or sign in to continue."));
 			case JwtTokenInvalidException ex -> BalanceErrorPayload.error("Session Invalid", List.of("Your session is invalid. Please sign in to continue."));
-			default -> throw new BalanceBusinessException("Unexpected error");
+			default -> BalanceErrorPayload.error("Authentication Error", List.of(e.getMessage()));
 		};
 		return handle(error, HttpStatus.UNAUTHORIZED);
 	}

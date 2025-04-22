@@ -1,4 +1,4 @@
-package com.jdc.balance.service.entity;
+package com.jdc.balance.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

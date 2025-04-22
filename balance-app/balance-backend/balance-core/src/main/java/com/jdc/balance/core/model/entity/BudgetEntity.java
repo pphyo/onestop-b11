@@ -2,7 +2,7 @@ package com.jdc.balance.core.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.YearMonth;
+import java.time.LocalDate;
 
 import com.jdc.balance.core.util.BalanceConstant;
 
@@ -28,12 +28,12 @@ public class BudgetEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private YearMonth month;
-
-	@Column(name = "limit_amount", nullable = false, precision = 15, scale = 2)
+	@Column(name = "limit_amount", nullable = false, precision = 10, scale = 2)
 	private BigDecimal limitAmount;
-
+	
+	@Column(nullable = false)
+	private LocalDate month = LocalDate.now();
+	
 	@ManyToOne(optional = false)
 	private CategoryEntity category;
 

@@ -19,7 +19,7 @@ import com.jdc.balance.core.payload.BalancePayload;
 import com.jdc.balance.core.payload.input.CurrencyInput;
 import com.jdc.balance.core.payload.output.CurrencyOutput;
 import com.jdc.balance.core.payload.param.CurrencyParam;
-import com.jdc.balance.service.entity.CurrencyService;
+import com.jdc.balance.service.CurrencyService;
 
 import lombok.RequiredArgsConstructor;
 

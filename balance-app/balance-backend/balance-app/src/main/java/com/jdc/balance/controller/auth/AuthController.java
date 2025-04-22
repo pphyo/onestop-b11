@@ -13,7 +13,7 @@ import com.jdc.balance.core.payload.input.LogInInput;
 import com.jdc.balance.core.payload.input.SignUpInput;
 import com.jdc.balance.core.payload.input.TokenRefreshInput;
 import com.jdc.balance.core.payload.output.AuthOutput;
-import com.jdc.balance.service.entity.AuthService;
+import com.jdc.balance.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -27,9 +27,12 @@ public class CurrencyEntity extends AuditMetadataEntity implements Serializable 
 	private Long id;
 
 	@Column(nullable = false)
+	private String country;
+	
+	@Column(nullable = false)
 	private String name;
-
-	@Column(nullable = false, length = 20)
+	
+	@Column(nullable = false)
 	private String code;
 
 }

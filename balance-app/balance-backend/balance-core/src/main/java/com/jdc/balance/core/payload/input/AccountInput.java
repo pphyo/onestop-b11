@@ -22,7 +22,7 @@ public record AccountInput(
 	public AccountEntity entity(Function<Long, IconEntity> iconMapper) {
 		var entity = new AccountEntity();
 		entity.setName(name);
-		entity.setInitialAmount(amount);
+		entity.setAmount(amount);
 		entity.setIcon(iconMapper.apply(iconId));
 		return entity;
 	}

@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -28,18 +27,18 @@ public class CategoryEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 150, unique = true)
+	@Column(nullable = false)
 	private String name;
-
+	
 	@Column(nullable = false)
 	private Boolean income;
-
-	@OneToOne
+	
+	@ManyToOne(optional = false)
 	private IconEntity icon;
-
-	@ManyToOne
+	
+	@ManyToOne(optional = false)
 	private UserEntity user;
-
-	@OneToMany(mappedBy = "category", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+	
+	@OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	private List<TransactionEntity> transactions;
 }

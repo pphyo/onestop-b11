@@ -1,7 +1,7 @@
 package com.jdc.balance.core.model.entity.consts;
 
-public enum CurrencyPosition {
-	
-	BEFORE, AFTER, NONE
+public enum IconFilterType {
 
+	Income, Expense, Both
+	
 }

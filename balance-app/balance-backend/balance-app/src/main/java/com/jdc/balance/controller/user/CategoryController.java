@@ -19,7 +19,7 @@ import com.jdc.balance.core.payload.BalancePayload;
 import com.jdc.balance.core.payload.input.CategoryInput;
 import com.jdc.balance.core.payload.output.CategoryOutput;
 import com.jdc.balance.core.payload.param.CategoryParam;
-import com.jdc.balance.service.entity.CategoryService;
+import com.jdc.balance.service.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 

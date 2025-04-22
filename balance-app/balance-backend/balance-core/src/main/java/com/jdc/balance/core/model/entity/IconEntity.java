@@ -3,10 +3,13 @@ package com.jdc.balance.core.model.entity;
 import java.io.Serializable;
 
 import com.jdc.balance.core.model.entity.audit.AuditMetadataEntity;
+import com.jdc.balance.core.model.entity.consts.IconFilterType;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +29,15 @@ public class IconEntity extends AuditMetadataEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false)
+	private String name;
+	
 	@Column(nullable = false, unique = true)
 	private String path;
+	
+	private Boolean account;
+	
+	@Enumerated(EnumType.STRING)
+	private IconFilterType filter;
 
 }

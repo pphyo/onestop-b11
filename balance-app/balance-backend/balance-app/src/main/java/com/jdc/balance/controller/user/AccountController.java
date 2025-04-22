@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jdc.balance.core.payload.BalancePayload;
 import com.jdc.balance.core.payload.input.AccountInput;
 import com.jdc.balance.core.payload.output.AccountOutput;
-import com.jdc.balance.service.entity.AccountService;
+import com.jdc.balance.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
 

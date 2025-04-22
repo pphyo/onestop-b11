@@ -1,4 +1,4 @@
-package com.jdc.balance.service.entity;
+package com.jdc.balance.service;
 
 import static com.jdc.balance.core.util.BalanceUtil.notFoundWithId;
 
