@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import BalanceAlertDialog from "@/components/widget/BalanceAlertDialog";
 import BalanceDropdownMenu from "@/components/widget/BalanceDropdownMenu";
 import BalancePopover from "@/components/widget/BalancePopover";
 import BalanceSearchFormControl from "@/components/widget/BalanceSearchFormControl";
@@ -54,11 +55,15 @@ const Category = () => {
         }
     });
 
+    const [openAlert, setOpenAlert] = useState<boolean>(false);
+
     const [openCategoryForm, setOpenCategoryForm] = useState<boolean>(false);
 
     const [categoryParams, setCategoryParams] = useState<CategorySearchParam>({name: "", income: undefined});
 
     const {loading, categories, refetch} = useCategory(categoryParams);
+
+    const [idForDelete, setIdForDelete]  = useState<number>(0);
 
     const location = useLocation();
 
@@ -101,15 +106,25 @@ const Category = () => {
     };
 
     const handleEditCategory = (category: CategoryOutput) => {
+        resetForm();
         form.setValue("id", category.id);
         form.setValue("name", category.name);
         form.setValue("income", category.income);
-        form.setValue("icon", {id: category.icon.id, name: category.icon.name, path: category.icon.path});
+        form.setValue("icon", category.icon);
         setOpenCategoryForm(true);
     };
 
     const handleConfirm = (id: number) => {
-        console.log(id);
+        setIdForDelete(id);
+        setOpenAlert(true);
+    };
+
+    const handleAlertAction = async () => {
+        const result = await categoryService.delete(idForDelete);
+        if(result) {
+            setOpenAlert(false);
+            refetch({name: "", income: undefined});
+        }
     };
 
     return (
@@ -191,6 +206,10 @@ const Category = () => {
                 onSubmit={handleSubmitCategoryForm}
                 initialType={form.getValues("income")}
             />
+
+            <BalanceAlertDialog open={openAlert} onClose={() => setOpenAlert(false)} onAction={handleAlertAction} actionText="Delete" title="Delete Confirm">
+                Are you sure to delete?
+            </BalanceAlertDialog>
         </>
     )
   }

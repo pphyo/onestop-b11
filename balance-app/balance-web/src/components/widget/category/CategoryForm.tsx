@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { getIconService } from '@/model/service/icon.service';
-import { IconOutputs } from '@/model/dto/balance.dto';
+import { IconDtos } from '@/model/dto/balance.dto';
 
 type CategoryFormProps = {
     form: UseFormReturn<CategoryFormData>;
@@ -22,7 +22,7 @@ type CategoryFormProps = {
 const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmit, initialType}) => {
 
     const iconService = getIconService();
-    const [icons, setIcons] = useState<IconOutputs>([]);
+    const [icons, setIcons] = useState<IconDtos>([]);
 
     useEffect(() => {
         if(!open)

@@ -1,5 +1,7 @@
 package com.jdc.balance.controller.user;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jdc.balance.core.payload.BalancePayload;
 import com.jdc.balance.core.payload.input.AccountInput;
 import com.jdc.balance.core.payload.output.AccountOutput;
+import com.jdc.balance.core.payload.output.AccountOverallOutput;
+import com.jdc.balance.core.payload.param.AccountParam;
 import com.jdc.balance.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +47,16 @@ public class AccountController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<Boolean> deleteAccount(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(accountService.delete(id), HttpStatus.OK);
+	}
+	
+	@GetMapping("overall")
+	public BalancePayload<AccountOverallOutput> searchAccountOverall() {
+		return BalancePayload.success(accountService.searchOverall());
+	}
+	
+	@GetMapping
+	public BalancePayload<List<AccountOutput>> searchAccount(AccountParam param) {
+		return BalancePayload.success(accountService.search(param));
 	}
 	
 	@GetMapping("{id}")

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { IconOutput } from '@/model/dto/balance.dto';
+import { IconDto } from '@/model/dto/balance.dto';
 import React from 'react';
 import BalanceDropdownMenu from './BalanceDropdownMenu';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import { Link } from 'react-router';
 type DataBoxProps = {
     dataName: string;
     dataValue: string;
-    dataIcon: IconOutput;
+    dataIcon: IconDto;
     link: string;
     children: React.ReactNode;
 }

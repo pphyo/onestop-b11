@@ -10,3 +10,8 @@ export interface CategorySearchParam {
     name: string;
     income: boolean | undefined;
 }
+
+export interface AccountSearchParam {
+    name: string;
+    amount: number;
+}

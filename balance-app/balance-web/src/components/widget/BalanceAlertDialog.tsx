@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 type BalanceAlertDialogProps = {
     title: string;
@@ -13,12 +13,13 @@ type BalanceAlertDialogProps = {
 const BalanceAlertDialog: React.FC<BalanceAlertDialogProps> = ({title, children, open, onClose, onAction, actionText}) => {
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
-        <AlertDialogContent>
+        <AlertDialogContent aria-describedby={undefined} aria-description={undefined}>
             <AlertDialogHeader>
                 <AlertDialogTitle>{title}</AlertDialogTitle>
-                <AlertDialogDescription className="sr-only"></AlertDialogDescription>
             </AlertDialogHeader>
+            <div>
             {children}
+            </div>
             <AlertDialogFooter>
                 <AlertDialogCancel>Close</AlertDialogCancel>
                 <AlertDialogAction onClick={onAction}>{actionText}</AlertDialogAction>

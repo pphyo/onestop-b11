@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
-import { ChevronUp, HeartCrack, LogOut, LucideIcon, Settings2, User2 } from 'lucide-react';
+import { ChevronUp, HeartCrack, LogOut, Settings2, User2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { getAuthService } from '@/model/service/auth.service';
 import { useNavigate } from 'react-router';
@@ -9,12 +9,12 @@ import BalanceAlertDialog from './BalanceAlertDialog';
 import { useAuth } from '@/hooks/useAuth';
 
 type BalanceSidebarProps = {
-    logo: LucideIcon;
+    logo: React.ReactNode;
     title: React.ReactNode;
     content: React.ReactNode;
 }
 
-const BalanceSidebar: React.FC<BalanceSidebarProps> = (props) => {
+const BalanceSidebar: React.FC<BalanceSidebarProps> = ({logo, title, content}) => {
     const authService = getAuthService();
     const user = authService.getCurrentUser();
     const { signOut } = useAuth();
@@ -30,12 +30,9 @@ const BalanceSidebar: React.FC<BalanceSidebarProps> = (props) => {
   return (
     <>
         <Sidebar>
-            <SidebarHeader className={cn("flex flex-row gap-4 justify-center items-center")}>
-                {<props.logo size={36} />} <p>{props.title}</p>
-            </SidebarHeader>
-
+            <SidebarHeader className={cn("flex flex-row items-center justify-center my-3")}>{ logo } { title }</SidebarHeader>
             <SidebarContent>
-                {props.content}
+                {content}
             </SidebarContent>
 
             <SidebarFooter>

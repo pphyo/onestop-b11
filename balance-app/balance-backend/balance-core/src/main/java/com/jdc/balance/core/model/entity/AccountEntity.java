@@ -35,10 +35,10 @@ public class AccountEntity implements Serializable {
 	@Column(nullable = false, precision = 15, scale = 2)
 	private BigDecimal amount;
 
-	@OneToOne
+	@OneToOne(optional = false)
 	private IconEntity icon;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private UserEntity user;
 
 	@OneToMany(mappedBy = "account", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)

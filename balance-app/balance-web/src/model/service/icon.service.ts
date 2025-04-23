@@ -1,6 +1,6 @@
 import { BASE_API } from "@/lib/consts.type";
 import { IconSearchParam } from "../dto/balance.search-param";
-import { BalanceApiPayload, IconOutput, IconOutputs } from "../dto/balance.dto";
+import { BalanceApiPayload, IconDto, IconDtos } from "../dto/balance.dto";
 import axiosInstance from "@/axios/axios-instance";
 
 const ICONS_API = `${BASE_API}/user/icons`;
@@ -17,11 +17,11 @@ class IconService {
         return IconService.instance;
     }
 
-    async search(params: IconSearchParam): Promise<BalanceApiPayload<IconOutputs>> {
+    async search(params: IconSearchParam): Promise<BalanceApiPayload<IconDtos>> {
         return await axiosInstance.get(ICONS_API, {params}).then(res => res.data);
     }
 
-    async searchById(id: number): Promise<BalanceApiPayload<IconOutput>> {
+    async searchById(id: number): Promise<BalanceApiPayload<IconDto>> {
         return await axiosInstance(`${ICONS_API}/${id}`).then(res => res.data);
     }
 }
