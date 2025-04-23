@@ -1,6 +1,34 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@layer utilities {
+  .animate-wavy {
+    animation: wavy 1s infinite;
+  }
+
+  .delay-0 {
+    animation-delay: 0ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  @keyframes wavy {
+    0%, 100% {
+      transform: translate(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

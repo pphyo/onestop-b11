@@ -7,6 +7,7 @@ import { Home } from "@/pages/public/Home";
 import Account from "@/pages/user/account/Account";
 import Budget from "@/pages/user/budget/Budget";
 import Category from "@/pages/user/category/Category";
+import CategoryDetail from "@/pages/user/category/CategoryDetail";
 import Dashboard from "@/pages/user/dashboard/Dashboard";
 import Setting from "@/pages/user/setting/Setting";
 import Transaction from "@/pages/user/transaction/Transaction";
@@ -30,6 +31,7 @@ export const BALANCE_ROUTES: RouteObjects = [
         { path: "budget", element: <Budget /> },
         { path: "account", element: <Account /> },
         { path: "category", element: <Category /> },
+        { path: "category/:id", element: <CategoryDetail /> },
         { path: "setting", element: <Setting /> },
         { index: true, element: <Navigate to={"/balance/app/user/dashboard"} />}
     ]},

@@ -7,14 +7,22 @@ import BalancePopover from "@/components/widget/BalancePopover";
 import BalanceSearchFormControl from "@/components/widget/BalanceSearchFormControl";
 import CategoryControl from "@/components/widget/category/CategoryControl";
 import CategoryForm from "@/components/widget/category/CategoryForm";
+import DataBox from "@/components/widget/DataBox";
+import DataBoxContainer from "@/components/widget/DataBoxContainer";
+import DataNotFound from "@/components/widget/DataNotFound";
+import Loading from "@/components/widget/Loading";
 import MainPageTitle from "@/components/widget/MainPageTitle";
+import useCategory from "@/hooks/useCategory";
 import MainPageLayout from "@/layouts/MainPageLayout";
 import { cn } from "@/lib/utils";
+import { CategoryOutput } from "@/model/dto/balance.dto";
+import { CategorySearchParam } from "@/model/dto/balance.search-param";
 import { getCategoryService } from "@/model/service/category.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowDownAZ, ArrowDownZA, CalendarArrowDown, CalendarArrowUp, Funnel, ListFilter, Plus, Tags } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router";
 import { z } from "zod";
 
 export const iconSchema = z.object({
@@ -48,6 +56,12 @@ const Category = () => {
 
     const [openCategoryForm, setOpenCategoryForm] = useState<boolean>(false);
 
+    const [categoryParams, setCategoryParams] = useState<CategorySearchParam>({name: "", income: undefined});
+
+    const {loading, categories, refetch} = useCategory(categoryParams);
+
+    const location = useLocation();
+
     const handleOpenCategoryForm = () => {
         setOpenCategoryForm(true);
     };
@@ -65,7 +79,7 @@ const Category = () => {
             iconId: data.icon.id
         });
         if(result) {
-            console.log(result);
+            refetch({name: "", income: undefined});
         }
         setOpenCategoryForm(false);
     };
@@ -76,6 +90,26 @@ const Category = () => {
         form.setValue("name", "");
         form.setValue("income", true);
         form.setValue("icon", {id: 0, name: "", path: ""});
+    };
+
+    const handleNameParamChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setCategoryParams((prev) => ({...prev, name: event.target.value}));
+    };
+
+    const handleIncomeParamChange = (value: string) => {
+        setCategoryParams((prev) => ({...prev, income: value == "Both" ? undefined : value == "Income" ? true : false}));
+    };
+
+    const handleEditCategory = (category: CategoryOutput) => {
+        form.setValue("id", category.id);
+        form.setValue("name", category.name);
+        form.setValue("income", category.income);
+        form.setValue("icon", {id: category.icon.id, name: category.icon.name, path: category.icon.path});
+        setOpenCategoryForm(true);
+    };
+
+    const handleConfirm = (id: number) => {
+        console.log(id);
     };
 
     return (
@@ -92,10 +126,10 @@ const Category = () => {
                                                 </Button>}
                         >
                             <BalanceSearchFormControl label="Name" labelFor="name">
-                                <Input type="text" id="name" placeholder="Category name" />
+                                <Input type="text" id="name" placeholder="Category name" onChange={handleNameParamChange} />
                             </BalanceSearchFormControl>
                             <BalanceSearchFormControl label="Type" labelFor="type">
-                                <Select>
+                                <Select onValueChange={handleIncomeParamChange}>
                                     <SelectTrigger className={cn("w-full")}>
                                         <SelectValue placeholder="Category type" />
                                     </SelectTrigger>
@@ -108,7 +142,7 @@ const Category = () => {
                             </BalanceSearchFormControl>
                         </BalancePopover>
 
-                        <BalanceDropdownMenu trigger={
+                        <BalanceDropdownMenu side="left" trigger={
                                             <Button variant={"ghost"}>
                                                 <ListFilter /> Sort
                                             </Button>
@@ -128,6 +162,26 @@ const Category = () => {
                         </BalanceDropdownMenu>
                     </div>
                 </CategoryControl>
+
+                {
+                    loading ? <Loading /> :
+                    categories.length == 0 ? <DataNotFound data="category" /> :
+                    <DataBoxContainer>
+                        {
+                            categories.map(cat => (
+                                <DataBox key={cat.id}
+                                    link={`${location.pathname}/${cat.id}`}
+                                    dataName={cat.name}
+                                    dataValue={cat.income ? "Income" : "Expense"}
+                                    dataIcon={cat.icon}>
+                                        <DropdownMenuItem onClick={() => handleEditCategory(cat)}>Edit</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleConfirm(cat.id)}>Delete</DropdownMenuItem>
+                                </DataBox>
+                            ))
+                        }
+                    </DataBoxContainer>
+                }
+
             </MainPageLayout>
 
             <CategoryForm

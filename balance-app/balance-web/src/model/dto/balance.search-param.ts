@@ -8,5 +8,5 @@ export interface IconSearchParam {
 
 export interface CategorySearchParam {
     name: string;
-    income: boolean;
+    income: boolean | undefined;
 }

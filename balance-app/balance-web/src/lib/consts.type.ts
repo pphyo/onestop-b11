@@ -10,6 +10,8 @@ export type MENU = {
     icon: LucideIcon;
 }
 
+export type MenuSide = "top" | "bottom" | "left" | "right";
+
 export const HEADER_JSON = {
     "Content-Type": "application/json"
 }
