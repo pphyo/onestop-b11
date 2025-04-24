@@ -1,6 +1,6 @@
 package com.jdc.balance.core.model.entity.consts;
 
-public enum IconFilterType {
+public enum CategoryIconFilter {
 
 	Income, Expense, Both
 	

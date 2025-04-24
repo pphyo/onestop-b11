@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jdc.balance.core.model.entity.AccountEntity;
 import com.jdc.balance.core.model.entity.AccountEntity_;
 import com.jdc.balance.core.model.entity.IconEntity;
+import com.jdc.balance.core.model.entity.TransactionEntity;
 import com.jdc.balance.core.model.entity.consts.TransactionType;
 import com.jdc.balance.core.payload.input.AccountInput;
 import com.jdc.balance.core.payload.output.AccountOutput;
@@ -75,26 +76,28 @@ public class AccountService {
 		var username = SecurityContextHolder.getContext().getAuthentication().getName();
 		var accounts = accountRepo.findByUserUsername(username);
 		
-		BigDecimal income = getIncome(accounts);
-		BigDecimal expense = getExpense(accounts);
-		return AccountOverallOutput.from(formatMapper, income, expense, income.subtract(expense));
-	}
-	
-	private BigDecimal getIncome(List<AccountEntity> accounts) {
-		var totalAmountInAccount = accounts.stream().map(acc -> acc.getAmount())
-										.reduce(BigDecimal.ZERO, (a, b) -> a = a.add(b));
+		var netAsset = accounts.stream()
+							.map(AccountEntity::getAmount)
+							.filter(amount -> amount != null)
+							.reduce(BigDecimal.ZERO, BigDecimal::add);
 		
-		var totalExpense = getExpense(accounts);
+		var income = accounts.stream()
+						.flatMap(acc -> acc.getTransactions()
+										.stream()
+										.filter(tx -> tx.getType().equals(TransactionType.Income))
+										.map(TransactionEntity::getAmount)
+										.filter(amount -> amount != null))
+						.reduce(BigDecimal.ZERO, BigDecimal::add);
 		
-		return totalAmountInAccount.add(totalExpense);
-	}
-	
-	private BigDecimal getExpense(List<AccountEntity> accounts) {
-		return accounts.stream().flatMap(acc ->
-			acc.getTransactions()
-			.stream()
-			.filter(tx -> tx.getType().equals(TransactionType.Expense)).map(tx -> tx.getAmount()))
-				.reduce(BigDecimal.ZERO, (a, b) -> a = a.add(b));
+		var expense = accounts.stream()
+						.flatMap(acc -> acc.getTransactions()
+										.stream()
+										.filter(tx -> tx.getType().equals(TransactionType.Expense))
+										.map(TransactionEntity::getAmount)
+										.filter(amount -> amount != null))
+						.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		return AccountOverallOutput.from(formatMapper, income, expense, netAsset);
 	}
 	
 	@Transactional(readOnly = true)

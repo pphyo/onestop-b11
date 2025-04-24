@@ -5,12 +5,14 @@ import { MenuSide } from '@/lib/consts.type';
 type BalanceDropdownMenuProps = {
     trigger: React.ReactNode;
     children: React.ReactNode;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     side: MenuSide;
 }
 
-const BalanceDropdownMenu: React.FC<BalanceDropdownMenuProps> = ({trigger, children, side}) => {
+const BalanceDropdownMenu: React.FC<BalanceDropdownMenuProps> = ({trigger, children, open, onOpenChange, side}) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
         <DropdownMenuTrigger asChild>
             {trigger}
         </DropdownMenuTrigger>

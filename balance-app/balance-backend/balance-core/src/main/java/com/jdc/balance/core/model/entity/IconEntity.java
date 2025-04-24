@@ -3,7 +3,7 @@ package com.jdc.balance.core.model.entity;
 import java.io.Serializable;
 
 import com.jdc.balance.core.model.entity.audit.AuditMetadataEntity;
-import com.jdc.balance.core.model.entity.consts.IconFilterType;
+import com.jdc.balance.core.model.entity.consts.CategoryIconFilter;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.Column;
@@ -38,6 +38,6 @@ public class IconEntity extends AuditMetadataEntity implements Serializable {
 	private Boolean account;
 	
 	@Enumerated(EnumType.STRING)
-	private IconFilterType filter;
+	private CategoryIconFilter filter;
 
 }

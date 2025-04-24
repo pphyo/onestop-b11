@@ -1,9 +1,9 @@
-export type IconFilterType = "Income" | "Expense" | "Both";
+export type CategoryIconFilter = "Income" | "Expense" | "Both";
 
 export interface IconSearchParam {
     name: string;
     account: boolean;
-    filter: IconFilterType;
+    filter: CategoryIconFilter;
 }
 
 export interface CategorySearchParam {

@@ -7,13 +7,13 @@ import org.springframework.util.StringUtils;
 
 import com.jdc.balance.core.model.entity.IconEntity;
 import com.jdc.balance.core.model.entity.IconEntity_;
-import com.jdc.balance.core.model.entity.consts.IconFilterType;
+import com.jdc.balance.core.model.entity.consts.CategoryIconFilter;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-public record IconParam(String name, IconFilterType filter, Boolean account) {
+public record IconParam(String name, CategoryIconFilter filter, Boolean account) {
 
 	public Predicate where(CriteriaBuilder cb, Root<IconEntity> root) {
 		List<Predicate> predicates = new ArrayList<>();
@@ -27,9 +27,9 @@ public record IconParam(String name, IconFilterType filter, Boolean account) {
 		}
 		
 		if(null != filter) {
-			if(!filter.equals(IconFilterType.Both)) {
+			if(!filter.equals(CategoryIconFilter.Both)) {
 				predicates.add(cb.or(
-						cb.equal(root.get(IconEntity_.filter), IconFilterType.Both),
+						cb.equal(root.get(IconEntity_.filter), CategoryIconFilter.Both),
 						cb.equal(root.get(IconEntity_.filter), filter)
 					));
 			} else {

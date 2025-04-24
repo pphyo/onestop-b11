@@ -5,12 +5,11 @@ import BalanceSearchFormControl from "@/components/widget/BalanceSearchFormContr
 import MainPageTitle from "@/components/widget/MainPageTitle";
 import MainPageLayout from "@/layouts/MainPageLayout";
 import { cn } from "@/lib/utils";
-import { getAccountService } from "@/model/service/account.service";
 import { Funnel, Plus, Wallet } from "lucide-react";
 
 const Account = () => {
 
-  const accountService = getAccountService();
+  // const accountService = getAccountService();
 
   return (
     <>

@@ -6,39 +6,50 @@ import BalanceDialog from '@/components/widget/BalanceDialog';
 import { BalanceFormControl } from '@/components/widget/BalanceFormControl';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { cn } from '@/lib/utils';
+import { cn, delay } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { getIconService } from '@/model/service/icon.service';
 import { IconDtos } from '@/model/dto/balance.dto';
+import { CategoryIconFilter } from '@/model/dto/balance.search-param';
 
 type CategoryFormProps = {
     form: UseFormReturn<CategoryFormData>;
     open: boolean;
     onClose: () => void;
-    onSubmit: (data: CategoryFormData) => void;
-    initialType: boolean;
+    onSubmit: (data: CategoryFormData) => Promise<void>;
+    initialFilter: CategoryIconFilter;
 }
 
-const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmit, initialType}) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmit, initialFilter}) => {
 
     const iconService = getIconService();
     const [icons, setIcons] = useState<IconDtos>([]);
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         if(!open)
             return;
 
+        const newParam = {name: "", filter: initialFilter, account: false};
+
         const fetchIcons = async () => {
-            const result = await iconService.search({name: "", account: false, filter: initialType === true ? "Income" : "Expense"});
-            const iconList = result && result.payload;
-            if(iconList.length) {
-                setIcons(iconList);
-            }
+            const result = await iconService.search(newParam); // Use param directly
+            setIcons(result.payload);
         };
 
         fetchIcons();
+    }, [open, initialFilter, iconService]);
 
-    }, [iconService, open, initialType]);
+    const handleSubmit = async (data: CategoryFormData) => {
+        setSubmitting(true);
+        try {
+            await delay(500);
+            await onSubmit(data); // Wait for submission to complete
+            onClose(); // Close the dialog after submission
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <Form {...form}>
@@ -46,13 +57,17 @@ const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmi
                 open={open}
                 onClose={onClose}
                 title={form.getValues("id") == 0 ? "Create Category" : "Category Edit"}
-                onAction={form.handleSubmit(onSubmit)}
-                actionText="Save"
+                onAction={form.handleSubmit(handleSubmit)}
+                actionText={submitting ? "Saving..." : "Save"}
             >
                 <FormField control={form.control} name="name"
                     render={({field}) => (
                         <BalanceFormControl label="Name" labelFor="name">
-                            <Input {...field} type="text" id="name" placeholder="Category name" />
+                            <Input {...field}
+                                type="text"
+                                value={field.value ?? ""}
+                                id="name"
+                                placeholder="Category name" />
                         </BalanceFormControl>
                     )}
                 />
@@ -62,15 +77,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmi
                         <BalanceFormControl label="Category Type">
                             <RadioGroup className={cn("flex items-center gap-4 pt-1")}
                                 value={field.value.toString()}
-                                onValueChange={(value) => {
+                                onValueChange={(value: string) => {
                                     field.onChange(value === "true");
-                                    iconService.search({name: "", account: false, filter: value === "true" ? "Income" : "Expense"})
-                                        .then(res => {
-                                            const iconList = res && res.payload;
-                                            if(iconList.length) {
-                                                setIcons(iconList);
-                                            }
-                                        });
+                                    const newParam = {name: "", filter: (value === "true" ? "Income" : "Expense") as CategoryIconFilter, account: false};
+                                    iconService.search(newParam).then(res => setIcons(res.payload));
                                 }}
                             >
                                 <div className={cn("flex gap-1")}>
@@ -92,7 +102,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmi
                         <BalanceFormControl label="Icon">
                             <div className={cn("max-h-28 overflow-y-auto")}>
                                 <RadioGroup className={cn("grid grid-cols-4 gap-2 overflow-x-auto whitespace-nowrap")}
-                                    onValueChange={(value) => {
+                                    onValueChange={(value: string) => {
                                         const result = icons.find(icon => icon.id == + value);
                                         field.onChange(result);
                                     }}
