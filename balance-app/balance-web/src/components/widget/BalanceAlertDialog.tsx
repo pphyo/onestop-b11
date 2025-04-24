@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { cn } from '@/lib/utils';
 
 type BalanceAlertDialogProps = {
     title: string;
@@ -21,8 +22,8 @@ const BalanceAlertDialog: React.FC<BalanceAlertDialogProps> = ({title, children,
             {children}
             </div>
             <AlertDialogFooter>
-                <AlertDialogCancel>Close</AlertDialogCancel>
-                <AlertDialogAction onClick={onAction}>{actionText}</AlertDialogAction>
+                <AlertDialogCancel className={cn("w-24")}>Close</AlertDialogCancel>
+                <AlertDialogAction className={cn("w-24")} onClick={onAction}>{actionText}</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>

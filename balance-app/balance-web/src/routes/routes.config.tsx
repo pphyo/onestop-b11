@@ -5,6 +5,7 @@ import { SignIn } from "@/pages/public/auth/SignIn";
 import { SignUp } from "@/pages/public/auth/SignUp";
 import { Home } from "@/pages/public/Home";
 import Account from "@/pages/user/account/Account";
+import AccountDetail from "@/pages/user/account/AccountDetail";
 import Budget from "@/pages/user/budget/Budget";
 import Category from "@/pages/user/category/Category";
 import CategoryDetail from "@/pages/user/category/CategoryDetail";
@@ -34,6 +35,7 @@ export const BALANCE_ROUTES: RouteObjects = [
             { path: "transaction", element: <Transaction /> },
             { path: "budget", element: <Budget /> },
             { path: "account", element: <Account /> },
+            { path: "account/:id", element: <AccountDetail /> },
             { path: "category", element: <Category /> },
             { path: "category/:id", element: <CategoryDetail /> },
             { path: "setting", element: <Setting /> },

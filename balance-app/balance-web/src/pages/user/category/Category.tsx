@@ -6,7 +6,7 @@ import BalanceAlertDialog from "@/components/widget/BalanceAlertDialog";
 import BalanceDropdownMenu from "@/components/widget/BalanceDropdownMenu";
 import BalancePopover from "@/components/widget/BalancePopover";
 import BalanceSearchFormControl from "@/components/widget/BalanceSearchFormControl";
-import CategoryForm from "@/components/widget/category/CategoryForm";
+import CategoryForm from "@/pages/user/category/CategoryForm";
 import DataBox from "@/components/widget/DataBox";
 import DataBoxContainer from "@/components/widget/DataBoxContainer";
 import DataNotFound from "@/components/widget/DataNotFound";
@@ -141,7 +141,7 @@ const Category = () => {
     return (
         <>
             <MainPageLayout>
-                <MainPageTitle icon={Tags} title="Your Categories" />
+                <MainPageTitle icon={Tags} title="Categories" />
                 <div className={cn("flex justify-between")}>
                     <Button variant={"outline"} onClick={handleOpenCategoryForm}>
                         <Plus /> Add New Category

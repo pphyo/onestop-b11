@@ -13,17 +13,102 @@ import MainPageLayout from "@/layouts/MainPageLayout";
 import { cn } from "@/lib/utils";
 import { getAccountService } from "@/model/service/account.service";
 import { Funnel, Plus, Wallet } from "lucide-react";
+import { z } from "zod";
+import { iconFormSchema } from "../category/Category";
+import { DefaultValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AccountDto, IconDto } from "@/model/dto/balance.dto";
+import AccountForm from "./AccountForm";
+import { useState } from "react";
+import BalanceAlertDialog from "@/components/widget/BalanceAlertDialog";
+
+const accountFormSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, {message: "Account name required."}),
+  amount: z.coerce.number().gt(0, {message: "Amount must be positive."}),
+  icon: iconFormSchema
+});
+
+export type AccountFormData = z.infer<typeof accountFormSchema>;
 
 const Account = () => {
+  const accountDefaultValues: DefaultValues<AccountDto<IconDto>> = {
+    id: 0,
+    name: "",
+    amount: 0,
+    icon: {id: 0, name: "", path: ""}
+  }
 
   const accountService = getAccountService();
 
+  const [openAccountForm, setOpenAccountForm] = useState(false);
+
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [idForDelete, setIdForDelete] = useState(0);
+
   const {loading, accounts, overall, refetchAccount, refetchOverall} = useAccount({name: "", amount: 0});
+
+  const form = useForm<AccountFormData>({
+    resolver: zodResolver(accountFormSchema),
+    defaultValues: accountDefaultValues
+  })
+
+  const handleOpenAccountForm = () => {
+    resetForm();
+    setOpenAccountForm(true);
+  };
+
+  const handleSubmitAccountForm = async (data: AccountFormData) => {
+    const resp = await accountService.save({
+      id: data.id,
+      name: data.name,
+      amount: data.amount,
+      icon: data.icon.id
+    });
+
+    if(resp) {
+      refetchAccount({name: "", amount: 0});
+      refetchOverall();
+    }
+    setOpenAccountForm(false);
+  };
+
+  const handleEdit = async (data: AccountDto<IconDto>) => {
+    resetForm();
+    form.setValue("id", data.id);
+    form.setValue("name", data.name);
+    form.setValue("amount", data.amount);
+    form.setValue("icon", data.icon);
+    setOpenAccountForm(true);
+  }
+
+  const handleDelete = async () => {
+    const resp = await accountService.delete(idForDelete);
+    if(resp) {
+      refetchAccount({name: "", amount: 0});
+      refetchOverall();
+    }
+    setOpenAlert(false);
+  };
+
+  const handleConfirm = (id: number) => {
+    setIdForDelete(id);
+    setOpenAlert(true);
+  };
+
+  const resetForm = () => {
+    form.reset();
+    form.setValue("id", 0);
+    form.setValue("name", "");
+    form.setValue("amount", 0);
+    form.setValue("icon", {id: 0, name: "", path: ""});
+  };
 
   return (
     <>
       <MainPageLayout>
-        <MainPageTitle title="Your Accounts" icon={Wallet} />
+        <MainPageTitle title="Accounts" icon={Wallet} />
 
         { /* overall */ }
         <div className={cn("flex flex-col gap-4 bg-gray-100 rounded-md p-4")}>
@@ -51,7 +136,7 @@ const Account = () => {
 
         { /* control */}
         <div className={cn("flex justify-between")}>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} onClick={handleOpenAccountForm}>
             <Plus /> Create Account
           </Button>
 
@@ -79,10 +164,10 @@ const Account = () => {
                     dataName={acc.name}
                     dataValue={acc.amountWithFormat}
                     dataIcon={acc.icon}
-                    link={`/balance/app/acount/${acc.id}`}
+                    link={`/balance/app/user/account/${acc.id}`}
                   >
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleEdit(acc)}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleConfirm(acc.id)}>Delete</DropdownMenuItem>
                   </DataBox>
                 ))
               }
@@ -92,7 +177,22 @@ const Account = () => {
 
       </MainPageLayout>
 
-      {}
+      <AccountForm
+        form={form}
+        open={openAccountForm}
+        onClose={() => setOpenAccountForm(false)}
+        onSubmit={handleSubmitAccountForm}
+      />
+
+      <BalanceAlertDialog
+        open={openAlert}
+        onClose={() => setOpenAlert(false)}
+        onAction={handleDelete}
+        actionText="OK"
+        title="Delete Confirm"
+      >
+        Are you sure to delete?
+      </BalanceAlertDialog>
     </>
   )
 }

@@ -80,15 +80,7 @@ public class AccountService {
 							.map(AccountEntity::getAmount)
 							.filter(amount -> amount != null)
 							.reduce(BigDecimal.ZERO, BigDecimal::add);
-		
-		var income = accounts.stream()
-						.flatMap(acc -> acc.getTransactions()
-										.stream()
-										.filter(tx -> tx.getType().equals(TransactionType.Income))
-										.map(TransactionEntity::getAmount)
-										.filter(amount -> amount != null))
-						.reduce(BigDecimal.ZERO, BigDecimal::add);
-		
+				
 		var expense = accounts.stream()
 						.flatMap(acc -> acc.getTransactions()
 										.stream()
@@ -96,6 +88,8 @@ public class AccountService {
 										.map(TransactionEntity::getAmount)
 										.filter(amount -> amount != null))
 						.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		var income = expense.add(netAsset);
 		
 		return AccountOverallOutput.from(formatMapper, income, expense, netAsset);
 	}

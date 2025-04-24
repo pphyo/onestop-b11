@@ -8,7 +8,7 @@ export interface CurrencySearchParam {
 export interface IconSearchParam {
     name: string;
     account: boolean;
-    filter: CategoryIconFilter;
+    filter: CategoryIconFilter | undefined;
 }
 
 export interface CategorySearchParam {

@@ -67,7 +67,7 @@ const Setting = () => {
 
   return (
     <MainPageLayout>
-      <MainPageTitle icon={Settings} title="Your Settings" />
+      <MainPageTitle icon={Settings} title="Settings" />
 
       <div className={cn("flex flex-col gap-6")}>
         <div className={cn("flex gap-4 items-center")}>

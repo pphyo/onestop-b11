@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jdc.balance.core.model.entity.CategoryEntity;
+import com.jdc.balance.core.model.entity.CategoryEntity_;
 import com.jdc.balance.core.payload.input.CategoryInput;
 import com.jdc.balance.core.payload.output.CategoryOutput;
 import com.jdc.balance.core.payload.param.CategoryParam;
@@ -77,7 +78,7 @@ public class CategoryService {
 
 			cq.select(root);
 			cq.where(param.where(cb, root, username));
-			cq.orderBy(cb.desc(root.get("id")));
+			cq.orderBy(cb.desc(root.get(CategoryEntity_.id)));
 
 			return cq;
 		};

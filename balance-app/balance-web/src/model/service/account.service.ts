@@ -14,11 +14,11 @@ class AccountService {
         return AccountService.instance;
     }
 
-    async save(data: AccountDto): Promise<AccountDto> {
+    async save(data: AccountDto<number>): Promise<AccountDto> {
         const {id, ...value} = data;
         return id == 0 ?
             await axiosInstance.post(ACCOUNTS_API, value).then(res => res.data) :
-            await axiosInstance.post(`${ACCOUNTS_API}/${id}`, data).then(res => res.data);
+            await axiosInstance.put(`${ACCOUNTS_API}/${id}`, data).then(res => res.data);
     }
 
     async delete(id: number): Promise<boolean> {
