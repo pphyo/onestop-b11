@@ -21,7 +21,7 @@ class SettingService {
     }
 
     async searchCurrent(): Promise<BalanceApiPayload<SettingDto<CurrencyDto>>> {
-        return await axiosInstance.get(`${SETTINGS_API}/current`);
+        return await axiosInstance.get(`${SETTINGS_API}/current`).then(res => res.data);
     }
 
 }

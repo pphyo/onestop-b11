@@ -20,13 +20,12 @@ public record SettingInput(
 
 	public SettingEntity entity(
 			Function<Long, CurrencyEntity> currencyMapper,
-			Function<String, UserEntity> userMapper,
-			String username) {
+			UserEntity user) {
 		var entity = new SettingEntity();
 		entity.setDecimalPlace(decimalPlace);
 		entity.setCurrencyPosition(currencyPosition);
 		entity.setCurrency(currencyMapper.apply(currency));
-		entity.setUser(userMapper.apply(username));
+		entity.setUser(user);
 		return entity;
 	}
 

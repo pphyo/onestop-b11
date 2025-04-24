@@ -59,4 +59,4 @@ export interface AccountDto<T = number> {
     icon: T;
 }
 
-export type AccountDtos = AccountDto[];
+export type AccountDtos<T> = AccountDto<T>[];

@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 
 type DataBoxProps = {
     dataName: string;
-    dataValue: string;
+    dataValue: string | undefined;
     dataIcon: IconDto;
     link: string;
     children: React.ReactNode;

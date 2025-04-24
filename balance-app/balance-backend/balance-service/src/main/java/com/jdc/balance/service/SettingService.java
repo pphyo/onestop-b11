@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jdc.balance.core.model.entity.CurrencyEntity;
-import com.jdc.balance.core.model.entity.UserEntity;
 import com.jdc.balance.core.payload.input.SettingInput;
 import com.jdc.balance.core.payload.output.SettingOutput;
 import com.jdc.balance.core.util.BalanceUtil;
@@ -33,11 +32,10 @@ public class SettingService {
 																.findById(id)
 																.orElseThrow(() ->
 																	BalanceUtil.notFoundWithId("currency", id));
-		Function<String, UserEntity> userMapper = id -> userRepo
-															.findByUsername(id)
-															.orElseThrow(() ->
-																new UsernameNotFoundException(username));
-		return SettingOutput.from(settingRepo.save(input.entity(currencyMapper, userMapper, username)));
+		var user = userRepo.findByUsername(username)
+							.orElseThrow(() ->
+								new UsernameNotFoundException(username));
+		return SettingOutput.from(settingRepo.save(input.entity(currencyMapper, user)));
 	}
 	
 	public SettingOutput update(Long id, SettingInput input) {
