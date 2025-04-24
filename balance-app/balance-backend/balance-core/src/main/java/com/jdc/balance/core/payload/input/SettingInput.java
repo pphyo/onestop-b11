@@ -16,7 +16,7 @@ public record SettingInput(
 		@NotNull(message = "Currency position required.")
 		CurrencyPosition currencyPosition,
 		@NotNull(message = "Please select currency.")
-		Long currencyId) {
+		Long currency) {
 
 	public SettingEntity entity(
 			Function<Long, CurrencyEntity> currencyMapper,
@@ -25,7 +25,7 @@ public record SettingInput(
 		var entity = new SettingEntity();
 		entity.setDecimalPlace(decimalPlace);
 		entity.setCurrencyPosition(currencyPosition);
-		entity.setCurrency(currencyMapper.apply(currencyId));
+		entity.setCurrency(currencyMapper.apply(currency));
 		entity.setUser(userMapper.apply(username));
 		return entity;
 	}

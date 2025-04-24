@@ -13,6 +13,7 @@ import com.jdc.balance.core.payload.input.LogInInput;
 import com.jdc.balance.core.payload.input.SignUpInput;
 import com.jdc.balance.core.payload.input.TokenRefreshInput;
 import com.jdc.balance.core.payload.output.AuthOutput;
+import com.jdc.balance.repository.entity.SettingRepository;
 import com.jdc.balance.repository.entity.UserRepository;
 import com.jdc.balance.security.JwtTokenProvider;
 import com.jdc.balance.security.JwtTokenProvider.TokenType;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 
 	private final UserRepository userRepo;
+	private final SettingRepository settingRepo;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider tokenProvider;
 	private final AuthenticationManager authenticationManager;
@@ -68,6 +70,7 @@ public class AuthService {
 					.name(user.getName())
 					.username(user.getUsername())
 					.admin(user.getAdmin())
+					.setUpSetting(settingRepo.findByUserUsername(user.getUsername()).isPresent())
 					.accessToken(tokenProvider.generate(authentication, TokenType.Access))
 					.refreshToken(tokenProvider.generate(authentication, TokenType.Refresh))
 					.build();

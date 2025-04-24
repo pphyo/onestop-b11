@@ -32,8 +32,10 @@ export const SignIn = () => {
 
     const handleSubmitSignInForm = async (data: SignInFormData) => {
         signIn(data);
-        if(user) {
+        if(user?.setUpSetting) {
             navigate(`/balance/app/${user.admin ? "admin" : "user"}`);
+        } else {
+            navigate(`/balance/app/setup`);
         }
     };
 

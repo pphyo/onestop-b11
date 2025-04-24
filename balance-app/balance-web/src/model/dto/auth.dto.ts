@@ -2,6 +2,7 @@ interface UserDto {
     name: string;
     username: string;
     admin: boolean;
+    setUpSetting: boolean;
     accessToken: string;
     refreshToken: string;
 }

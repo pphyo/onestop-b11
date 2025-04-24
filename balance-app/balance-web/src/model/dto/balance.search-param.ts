@@ -1,5 +1,10 @@
 export type CategoryIconFilter = "Income" | "Expense" | "Both";
 
+export interface CurrencySearchParam {
+    name: string;
+    code: string;
+}
+
 export interface IconSearchParam {
     name: string;
     account: boolean;

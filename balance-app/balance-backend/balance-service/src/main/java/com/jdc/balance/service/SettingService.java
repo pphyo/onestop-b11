@@ -44,7 +44,7 @@ public class SettingService {
 		return SettingOutput.from(settingRepo.findById(id).map(setting -> {
 			setting.setDecimalPlace(input.decimalPlace());
 			setting.setCurrencyPosition(input.currencyPosition());
-			setting.setCurrency(currencyRepo.findById(input.currencyId()).orElseThrow(() -> BalanceUtil.notFoundWithId("currency", input.currencyId())));
+			setting.setCurrency(currencyRepo.findById(input.currency()).orElseThrow(() -> BalanceUtil.notFoundWithId("currency", input.currency())));
 			return setting;
 		}).orElseThrow(() -> BalanceUtil.notFoundWithId("setting", id)));
 	}

@@ -10,6 +10,7 @@ import Category from "@/pages/user/category/Category";
 import CategoryDetail from "@/pages/user/category/CategoryDetail";
 import Dashboard from "@/pages/user/dashboard/Dashboard";
 import Setting from "@/pages/user/setting/Setting";
+import SetUpWizard from "@/pages/user/SetUpWizard";
 import Transaction from "@/pages/user/transaction/Transaction";
 import { Navigate, RouteObject } from "react-router";
 
@@ -25,15 +26,19 @@ export const BALANCE_ROUTES: RouteObjects = [
             { path: "auth/signup", element: <SignUp /> }
         ]
     },
-    { path: "/balance/app/user", element: <AppLayout />, children: [
-        { path: "dashboard", element: <Dashboard /> },
-        { path: "transaction", element: <Transaction /> },
-        { path: "budget", element: <Budget /> },
-        { path: "account", element: <Account /> },
-        { path: "category", element: <Category /> },
-        { path: "category/:id", element: <CategoryDetail /> },
-        { path: "setting", element: <Setting /> },
-        { index: true, element: <Navigate to={"/balance/app/user/dashboard"} />}
+    {path: "/balance/app", children: [
+        { path: "setup", element: <SetUpWizard /> },
+
+        { path: "user", element: <AppLayout />, children: [
+            { path: "dashboard", element: <Dashboard /> },
+            { path: "transaction", element: <Transaction /> },
+            { path: "budget", element: <Budget /> },
+            { path: "account", element: <Account /> },
+            { path: "category", element: <Category /> },
+            { path: "category/:id", element: <CategoryDetail /> },
+            { path: "setting", element: <Setting /> },
+            { index: true, element: <Navigate to={"/balance/app/user/dashboard"} />}
+        ]},
     ]},
     { path: "*", element: <AccessedDenied three={false} /> }
 ]

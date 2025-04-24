@@ -4,6 +4,24 @@ export interface BalanceApiPayload<T> {
     payload: T;
 }
 
+export interface CurrencyDto {
+    id: number;
+    country: string;
+    name: string;
+    code: string;
+}
+
+export type CurrencyDtos = CurrencyDto[];
+
+export type DecimalPlace = "ZERO" | "ONE" | "TWO";
+export type CurrencyPosition = "BEFORE" | "AFTER" | "NONE";
+export interface SettingDto<T = number> {
+    id: number;
+    decimalPlace: DecimalPlace;
+    currencyPosition: CurrencyPosition;
+    currency: T;
+}
+
 export interface IconDto {
     id: number;
     name: string;

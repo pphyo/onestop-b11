@@ -45,6 +45,7 @@ public class BalanceSecurityConfiguration {
 						request.requestMatchers("/auth/**").permitAll();
 						request.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
 						request.requestMatchers("/user/**").hasAuthority("ROLE_USER");
+						request.requestMatchers("/any/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER");
 						request.anyRequest().authenticated();
 					});
 		
