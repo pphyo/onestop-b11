@@ -1,4 +1,4 @@
-package com.jdc.balance.controller.user;
+package com.jdc.balance.controller.auth;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import com.jdc.balance.service.IconService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("user/icons")
+@RequestMapping("any/icons")
 @RequiredArgsConstructor
-public class UserIconController {
+public class IconController {
 	
 	private final IconService iconService;
 	

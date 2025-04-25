@@ -1,0 +1,21 @@
+meta {
+  name: Create Income Expense
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BASE_ENDPOINT}}/user/transactions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type": "Expense",
+    "amount": 710,
+    "note": "Apartment Accessories Tax",
+    "account": 3,
+    "category": 2
+  }
+}

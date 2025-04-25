@@ -1,0 +1,15 @@
+meta {
+  name: Search
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{BASE_ENDPOINT}}/user/transactions?month=2025-04
+  body: none
+  auth: inherit
+}
+
+params:query {
+  month: 2025-04
+}

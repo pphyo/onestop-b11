@@ -1,0 +1,20 @@
+meta {
+  name: Search
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BASE_ENDPOINT}}/user/categories?name&income
+  body: none
+  auth: inherit
+}
+
+params:query {
+  name: 
+  income: 
+}
+
+headers {
+  Authorization: {{accessToken}}
+}

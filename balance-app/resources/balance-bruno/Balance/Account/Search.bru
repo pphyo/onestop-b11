@@ -1,0 +1,20 @@
+meta {
+  name: Search
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{BASE_ENDPOINT}}/user/accounts?name&amount=0
+  body: none
+  auth: inherit
+}
+
+params:query {
+  name: 
+  amount: 0
+}
+
+headers {
+  Authorization: {{accessToken}}
+}

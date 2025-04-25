@@ -3,7 +3,9 @@ package com.jdc.balance.core.model.entity;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.jdc.balance.core.exception.BalanceBusinessException;
 import com.jdc.balance.core.model.entity.audit.AuditTimeMetadata;
+import com.jdc.balance.core.model.entity.consts.TransactionType;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.CascadeType;
@@ -48,4 +50,20 @@ public class AccountEntity extends AuditTimeMetadata {
 
 	@OneToMany(mappedBy = "targetAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	private List<TransactionEntity> incomingTransactions;
+
+	public void balanceAmount(TransactionType type, BigDecimal amount) {
+		if(type.equals(TransactionType.Income)) {
+			this.amount = this.amount.add(amount);
+		} else {
+			if(this.amount.compareTo(amount) < 0) {
+				throw new BalanceBusinessException("Not enough amount.");
+			}
+			
+			this.amount = this.amount.subtract(amount);
+		}
+	}
+
+	public void revertBalanceAmount(TransactionType type, BigDecimal amount) {
+		this.amount = type.equals(TransactionType.Income) ? this.amount.subtract(amount) : this.amount.add(amount);	
+	}
 }

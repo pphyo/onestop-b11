@@ -3,6 +3,7 @@ package com.jdc.balance.core.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.jdc.balance.core.exception.BalanceBusinessException;
 import com.jdc.balance.core.model.entity.audit.AuditTimeMetadata;
 import com.jdc.balance.core.model.entity.consts.TransactionType;
 import com.jdc.balance.core.util.BalanceConstant;
@@ -51,5 +52,18 @@ public class TransactionEntity extends AuditTimeMetadata {
 
 	@ManyToOne
 	private CategoryEntity category;
+
+	public void transfer(AccountEntity from, AccountEntity to, BigDecimal amount) {
+		if(from.getAmount().compareTo(amount) < 0) {
+			throw new BalanceBusinessException("Not enough amount.");
+		}
+		from.setAmount(from.getAmount().subtract(amount));
+		to.setAmount(to.getAmount().add(amount));
+	}
+	
+	public void revertTransfer(AccountEntity from, AccountEntity to, BigDecimal amount) {
+		from.setAmount(from.getAmount().add(amount));
+		to.setAmount(to.getAmount().subtract(amount));
+	}
 
 }

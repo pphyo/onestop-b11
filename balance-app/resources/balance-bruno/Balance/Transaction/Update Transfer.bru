@@ -1,0 +1,21 @@
+meta {
+  name: Update Transfer
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{BASE_ENDPOINT}}/user/transactions/transfer/3
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type": "Transfer",
+    "amount": 900,
+    "note": "Cash to KPay",
+    "accountFrom": 2,
+    "accountTo": 3
+  }
+}

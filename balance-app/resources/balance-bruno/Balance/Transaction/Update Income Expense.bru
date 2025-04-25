@@ -1,0 +1,21 @@
+meta {
+  name: Update Income Expense
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{BASE_ENDPOINT}}/user/transactions/2
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "type": "Expense",
+    "amount": 210,
+    "note": "Apartment Accessories Tax",
+    "account": 3,
+    "category": 2
+  }
+}
