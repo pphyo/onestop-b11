@@ -1,7 +1,6 @@
 package com.jdc.balance.core.model.entity;
 
-import java.io.Serializable;
-
+import com.jdc.balance.core.model.entity.audit.AuditTimeMetadata;
 import com.jdc.balance.core.model.entity.consts.CurrencyPosition;
 import com.jdc.balance.core.model.entity.consts.DecimalPlace;
 import com.jdc.balance.core.util.BalanceConstant;
@@ -15,11 +14,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.SETTING)
 @Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "settings")
-public class SettingEntity implements Serializable {
+public class SettingEntity extends AuditTimeMetadata {
 
 	private static final long serialVersionUID = 1L;
 

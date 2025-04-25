@@ -20,3 +20,9 @@ export interface AccountSearchParam {
     name: string;
     amount: number;
 }
+
+export interface TransactionSearchParam {
+    month: string;
+    amount: number;
+    keyword: string;
+}

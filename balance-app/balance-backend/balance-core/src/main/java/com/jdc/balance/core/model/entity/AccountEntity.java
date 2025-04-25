@@ -1,9 +1,9 @@
 package com.jdc.balance.core.model.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.jdc.balance.core.model.entity.audit.AuditTimeMetadata;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.CascadeType;
@@ -17,11 +17,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.ACCOUNT)
 @Table(name = BalanceConstant.TABLE_PREFIX_TX + "accounts")
-public class AccountEntity implements Serializable {
+public class AccountEntity extends AuditTimeMetadata {
 
 	private static final long serialVersionUID = 1L;
 

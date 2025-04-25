@@ -1,9 +1,9 @@
 package com.jdc.balance.core.model.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.jdc.balance.core.model.entity.audit.AuditTimeMetadata;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.Column;
@@ -15,12 +15,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.BUDGET)
 @Table(name = BalanceConstant.TABLE_PREFIX_TX + "budgets", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "month"), @UniqueConstraint(columnNames = "category_id") })
-public class BudgetEntity implements Serializable {
+public class BudgetEntity extends AuditTimeMetadata {
 
 	private static final long serialVersionUID = 1L;
 

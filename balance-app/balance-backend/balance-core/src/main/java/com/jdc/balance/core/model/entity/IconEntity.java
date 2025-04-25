@@ -1,8 +1,6 @@
 package com.jdc.balance.core.model.entity;
 
-import java.io.Serializable;
-
-import com.jdc.balance.core.model.entity.audit.AuditMetadataEntity;
+import com.jdc.balance.core.model.entity.audit.AuditorMetadata;
 import com.jdc.balance.core.model.entity.consts.CategoryIconFilter;
 import com.jdc.balance.core.util.BalanceConstant;
 
@@ -21,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.ICON)
 @Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "icons")
-public class IconEntity extends AuditMetadataEntity implements Serializable {
+public class IconEntity extends AuditorMetadata {
 	
 	private static final long serialVersionUID = 1L;
 	

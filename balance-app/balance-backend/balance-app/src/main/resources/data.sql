@@ -15,7 +15,7 @@ insert into m_icons (name, path, account, filter) values ('Shopping', '/src/asse
 insert into m_icons (name, path, account, filter) values ('Social', '/src/assets/icons/category/expense/social2.svg', false, 'Expense');
 insert into m_icons (name, path, account, filter) values ('Sport', '/src/assets/icons/category/expense/sport1.svg', false, 'Expense');
 insert into m_icons (name, path, account, filter) values ('Tax', '/src/assets/icons/category/expense/tax3.svg', false, 'Expense');
-insert into m_icons (name, path, account, filter) values ('Telephone', '/src/assets/icons/category/expense/telephone2.svg', alse, 'Expense');
+insert into m_icons (name, path, account, filter) values ('Telephone', '/src/assets/icons/category/expense/telephone2.svg', false, 'Expense');
 insert into m_icons (name, path, account, filter) values ('Transportation', '/src/assets/icons/category/expense/transportation2.svg', false, 'Expense');
 insert into m_icons (name, path, account, filter) values ('Baby', '/src/assets/icons/category/expense/baby3.svg', false, 'Expense');
 insert into m_icons (name, path, account, filter) values ('Beauty', '/src/assets/icons/category/expense/beauty3.svg', false, 'Expense');

@@ -1,8 +1,6 @@
 package com.jdc.balance.core.model.entity;
 
-import java.io.Serializable;
-
-import com.jdc.balance.core.model.entity.audit.AuditMetadataEntity;
+import com.jdc.balance.core.model.entity.audit.AuditorMetadata;
 import com.jdc.balance.core.util.BalanceConstant;
 
 import jakarta.persistence.Column;
@@ -18,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity(name = BalanceConstant.EntityName.CURRENCY)
 @Table(name = BalanceConstant.TABLE_PREFIX_MASTER + "currencies")
-public class CurrencyEntity extends AuditMetadataEntity implements Serializable {
+public class CurrencyEntity extends AuditorMetadata {
 
 	private static final long serialVersionUID = 1L;
 
