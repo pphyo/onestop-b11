@@ -7,21 +7,25 @@ import MainPageTitle from "@/components/widget/MainPageTitle";
 import MainPageLayout from "@/layouts/MainPageLayout";
 import { cn } from "@/lib/utils";
 import { ArrowDown01, ArrowDown10, CalendarArrowDown, CalendarArrowUp, ChevronLeft, ChevronRight, Funnel, ListFilter, NotepadText, Plus } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChangeEventHandler, useMemo, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
 import BalanceDropdownMenu from "@/components/widget/BalanceDropdownMenu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { requestFormReset } from "react-dom";
 import TransactionForm from "./TransactionForm";
-import { TransactionDto } from "@/model/dto/balance.dto";
+import { AccountDto, CategoryDto, IconDto, TransactionDto } from "@/model/dto/balance.dto";
+import { getTransactionService } from "@/model/service/transaction.service";
+import useTransaction from "@/hooks/useTransaction";
+import Loading from "@/components/widget/Loading";
+import DataNotFound from "@/components/widget/DataNotFound";
+import TransactionList from "./TransactionList";
+import BalanceAlertDialog from "@/components/widget/BalanceAlertDialog";
 
 const transactionFormBaseSchema = z.object({
   id: z.number(),
   amount: z.coerce.number().gt(0, {message: "Amount must be positive"}),
-  issuedAt: z.date().optional(),
   note: z.string()
 });
 
@@ -54,13 +58,14 @@ export type TransactionFormData = z.infer<typeof transactionFormSchema>;
 
 const Transaction = () => {
 
+  const transactionService = getTransactionService();
+
   const form = useForm<TransactionFormData>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
       id: 0,
       amount: 0,
       type: "Expense",
-      issuedAt: new Date,
       note: "",
       account: 0,
       category: 0,
@@ -68,6 +73,8 @@ const Transaction = () => {
       accountTo: 0
     } as TransactionFormData
   })
+
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [openTransactionForm, setOpenTransactionForm] = useState(false);
 
@@ -81,6 +88,10 @@ const Transaction = () => {
     keyword: params.keyword
   }), [monthParam, params]);
 
+  const {loading, transactions, refetch} = useTransaction(transactionParam);
+
+  const [idForDelete, setIdForDelete] = useState(0);
+
   const handlePrevMonth = () => {
     setMonthParam(subMonths(monthParam, 1));
   };
@@ -89,13 +100,71 @@ const Transaction = () => {
     setMonthParam(addMonths(monthParam, 1));
   };
 
+  const handleAmountChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = Number(event.target.value || 0)
+    setParams(prev => ({...prev, amount: value}))
+  };
+
+  const handleKeywordChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    setParams(prev => ({...prev, keyword: event.target.value}))
+  };
+
   const handleOpenTransactionForm = () => {
     resetForm();
     setOpenTransactionForm(true);
   };
 
-  const handleSubmitTransactionForm = (data: TransactionDto) => {
-    console.log(data);
+  const handleSubmitTransactionForm = async (data: TransactionFormData) => {
+    const resp = await transactionService.save(data);
+    if(resp) {
+      resetParams();
+      refetch(transactionParam);
+    }
+    setOpenTransactionForm(false);
+    resetForm();
+  };
+
+  const handleEdit = (dto: TransactionDto<AccountDto<IconDto>, AccountDto<IconDto> | CategoryDto<IconDto>>) => {
+    resetForm();
+    form.setValue("id", dto.id);
+    form.setValue("amount", dto.amount);
+    form.setValue("note", dto.note);
+    form.setValue("type", dto.type);
+
+    if(dto.type === "Transfer") {
+      if(dto.accountFrom && dto.accountTo) {
+        form.setValue("accountFrom", dto.accountFrom.id);
+        form.setValue("accountTo", dto.accountTo.id);
+      }
+    } else {
+      if(dto.account && dto.category) {
+        form.setValue("account", dto.account.id);
+        form.setValue("category", dto.category.id)
+      }
+    }
+
+    setOpenTransactionForm(true);
+  };
+
+  const handleConfirm = (id: number) => {
+    setIdForDelete(id);
+    setOpenAlert(true);
+  };
+
+  const handleDelete = async () => {
+    if(idForDelete) {
+      const resp = await transactionService.delete(idForDelete);
+
+      if(resp) {
+        setOpenAlert(false);
+        setIdForDelete(0);
+      }
+    }
+  };
+
+  const resetParams = () => {
+    setMonthParam(new Date);
+    setParams({amount: 0, keyword: ""});
   };
 
   const resetForm = () => {
@@ -103,7 +172,6 @@ const Transaction = () => {
       id: 0,
       amount: 0,
       type: "Expense",
-      issuedAt: new Date,
       note: "",
       account: 0,
       category: 0,
@@ -151,11 +219,11 @@ const Transaction = () => {
               trigger={<Button variant={"ghost"}><Funnel /> 2 Filters</Button>}
             >
               <BalanceSearchFormControl label="Amount" labelFor="amount">
-                <Input type="number" id="amount" value="0" />
+                <Input type="number" id="amount" value={params.amount} onChange={handleAmountChange} />
               </BalanceSearchFormControl>
 
               <BalanceSearchFormControl label="Keyword" labelFor="keyword">
-                <Input type="text" id="keyword" value="" placeholder="Keyword to search" />
+                <Input type="text" id="keyword" value={params.keyword} onChange={handleKeywordChange} placeholder="Keyword to search" />
               </BalanceSearchFormControl>
             </BalancePopover>
 
@@ -177,6 +245,16 @@ const Transaction = () => {
             </BalanceDropdownMenu>
           </div>
         </div>
+
+        {
+          loading ? <Loading /> :
+          !transactions ? <DataNotFound data="transaction" /> :
+          <TransactionList
+            data={transactions}
+            onDelete={handleConfirm}
+            onEdit={handleEdit}
+          />
+        }
       </MainPageLayout>
 
       <TransactionForm
@@ -185,6 +263,16 @@ const Transaction = () => {
         onClose={() => setOpenTransactionForm(false)}
         onSubmit={handleSubmitTransactionForm}
       />
+
+      <BalanceAlertDialog
+        open={openAlert}
+        onClose={() => setOpenAlert(false)}
+        title="Delete Confirm"
+        onAction={handleDelete}
+        actionText="Delete"
+      >
+        Are you sure to delete?
+      </BalanceAlertDialog>
     </>
   )
 }

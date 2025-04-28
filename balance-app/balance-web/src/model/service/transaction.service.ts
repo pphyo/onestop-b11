@@ -23,6 +23,10 @@ class TransactionService {
                                .then(res => res.data);
     }
 
+    async delete(id: number): Promise<boolean> {
+        return axiosInstance.delete(`${TRANSACTIONS_API}/${id}`).then(res => res.data);
+    }
+
     async search(params: TransactionSearchParam): Promise<BalanceApiPayload<TransactionForMonthly>> {
         return await axiosInstance.get(TRANSACTIONS_API, {params})
                                   .then(res => res.data);

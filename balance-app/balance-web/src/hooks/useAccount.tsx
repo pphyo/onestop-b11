@@ -42,7 +42,6 @@ const useAccount = ({name, amount}: AccountSearchParam) => {
 
     const fetchOverall = useCallback(async () => {
         const resp = await accountService.searchOverall();
-        console.log(resp)
         if(resp)
             setOverall(resp.payload)
     }, [accountService]);

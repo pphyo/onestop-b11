@@ -129,61 +129,11 @@ public class TransactionService {
 		}
 	}
 
-	public TransactionBaseOutput updateIncomeExpense(Long id, TransactionForIncomeExpenseInput input) {
+	public boolean delete(Long id) {
 		var transaction = transactionRepo.findById(id).orElseThrow(() -> notFoundWithId("transaction", id));
-		
-		// revert balance
-		var account = transaction.getAccount();
-		account.revertBalanceAmount(transaction.getType(), transaction.getAmount());
-		
-		// set new fields for transaction
-		transaction.setAmount(input.amount());
-		transaction.setType(input.type());
-		transaction.setIssuedAt(input.issuedAt() == null ? LocalDateTime.now() : input.issuedAt());
-		transaction.setNote(input.note());
-		
-		// find account and category
-		var newAccount = accountRepo
-							.findById(input.account())
-							.orElseThrow(() -> notFoundWithId("account", input.account()));
-		
-		var newCategory = categoryRepo
-							.findById(input.category())
-							.orElseThrow(() -> notFoundWithId("category", input.category()));
-		
-		// balance
-		account.balanceAmount(input.type(), input.amount());
-		
-		// set in transaction
-		transaction.setAccount(newAccount);
-		transaction.setCategory(newCategory);
-		
-		return TransactionForIncomeExpenseOutput.from(transaction, amount -> formatService.formatAmount(amount));
-	}
-
-	public TransactionBaseOutput updateTransfer(Long id, TransactionForTransferInput input) {
-		Function<Long, AccountEntity> accountMapper = 
-								accountId -> accountRepo.findById(accountId)
-												.orElseThrow(() -> notFoundWithId("account", accountId));
-		
-		var transaction = transactionRepo.findById(id).orElseThrow(() -> notFoundWithId("transaction", id));
-		
-		var from = transaction.getAccount();
-		var to = transaction.getTargetAccount();
-		
-		transaction.revertTransfer(from, to, transaction.getAmount());
-		
-		transaction.setAmount(input.amount());
-		transaction.setType(input.type());
-		transaction.setIssuedAt(input.issuedAt() == null ? LocalDateTime.now() : input.issuedAt());
-		transaction.setNote(input.note());
-		
-		var fromForUpdate = accountMapper.apply(input.accountFrom());
-		var toForUpdate = accountMapper.apply(input.accountTo());
-		
-		transaction.transfer(fromForUpdate, toForUpdate, input.amount());
-		
-		return TransactionForTransferOutput.from(transaction, amount -> formatService.formatAmount(amount));
+		revertTransaction(transaction);
+		transactionRepo.deleteById(id);
+		return transactionRepo.findById(id).isEmpty();
 	}
 	
 	@Transactional(readOnly = true)

@@ -76,7 +76,7 @@ export type TransactionDto<T = number, P = number> = {
 
 export type TransactionForDaily = {
     date: string;
-    transactions: TransactionDto<AccountDto<IconDto>, AccountDto<IconDto> | CategoryDto<IconDto>>;
+    transactions: TransactionDto<AccountDto<IconDto>, AccountDto<IconDto> | CategoryDto<IconDto>>[];
 }
 
 export type TransactionForMonthly = {
