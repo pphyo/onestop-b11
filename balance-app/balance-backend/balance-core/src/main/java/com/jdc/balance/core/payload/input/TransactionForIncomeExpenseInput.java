@@ -24,7 +24,7 @@ public record TransactionForIncomeExpenseInput(
 		Long account,
 		@NotNull(message = "Category required.")
 		Long category
-	) implements TransactionInputBase {
+	) implements TransactionBaseInput {
 
 	public TransactionEntity entity(Function<Long, AccountEntity> accountMapper, Function<Long, CategoryEntity> categoryMapper) {
 		var entity = new TransactionEntity();

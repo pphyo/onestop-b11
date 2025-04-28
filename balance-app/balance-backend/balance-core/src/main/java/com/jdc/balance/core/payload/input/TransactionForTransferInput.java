@@ -25,7 +25,7 @@ public record TransactionForTransferInput(
 		Long accountFrom,
 		@NotNull(message = "To account required.")
 		Long accountTo
-	) implements TransactionInputBase {
+	) implements TransactionBaseInput {
 	
 	public TransactionEntity entity(Function<Long, AccountEntity> accountMapper) {
 		var entity = new TransactionEntity();

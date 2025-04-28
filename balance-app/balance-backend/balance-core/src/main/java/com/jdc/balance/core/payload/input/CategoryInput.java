@@ -15,14 +15,14 @@ public record CategoryInput(
 			@NotNull(message = "Category income required!")
 			Boolean income,
 			@NotNull(message = "Category icon required!")
-			Long iconId
+			Long icon
 		) {
 
 	public CategoryEntity entity(Function<Long, IconEntity> iconMapper, UserEntity user) {
 		var entity = new CategoryEntity();
 		entity.setName(name);
 		entity.setIncome(income);
-		entity.setIcon(iconMapper.apply(iconId));
+		entity.setIcon(iconMapper.apply(icon));
 		entity.setUser(user);
 		return entity;
 	}

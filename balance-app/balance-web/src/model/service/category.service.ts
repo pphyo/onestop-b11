@@ -1,5 +1,5 @@
 import { BASE_API } from "@/lib/consts.type";
-import { BalanceApiPayload, CategoryInput, CategoryOutput, CategoryOutputs } from "../dto/balance.dto";
+import { BalanceApiPayload, CategoryDto, CategoryDtos, IconDto } from "../dto/balance.dto";
 import axiosInstance from "@/axios/axios-instance";
 import { CategorySearchParam } from "../dto/balance.search-param";
 
@@ -17,18 +17,18 @@ class CategoryService {
         return CategoryService.instance;
     }
 
-    async save(data: CategoryInput): Promise<CategoryOutput> {
+    async save(data: CategoryDto): Promise<CategoryDto<IconDto>> {
         const {id, ...rest} = data;
         return id === 0 ?
                 await axiosInstance.post(CATEGORIES_API, rest).then(res => res.data) :
                 await axiosInstance.put(`${CATEGORIES_API}/${id}`, rest).then(res => res.data);
     }
 
-    async search(params: CategorySearchParam): Promise<BalanceApiPayload<CategoryOutputs>> {
+    async search(params: CategorySearchParam): Promise<BalanceApiPayload<CategoryDtos>> {
         return await axiosInstance.get(CATEGORIES_API, {params}).then(res => res.data);
     }
 
-    async searchById(id: number): Promise<BalanceApiPayload<CategoryOutput>> {
+    async searchById(id: number): Promise<BalanceApiPayload<CategoryDto<IconDto>>> {
         return await axiosInstance.get(`${CATEGORIES_API}/${id}`).then(res => res.data);
     }
 

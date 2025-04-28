@@ -1,5 +1,5 @@
 import { delay } from "@/lib/utils";
-import { CategoryOutputs } from "@/model/dto/balance.dto";
+import { CategoryDtos } from "@/model/dto/balance.dto";
 import { CategorySearchParam } from "@/model/dto/balance.search-param";
 import { getCategoryService } from "@/model/service/category.service";
 import { useCallback, useEffect, useState } from "react";
@@ -8,7 +8,7 @@ export const useCategory = ({name, income}: CategorySearchParam) => {
     const categoryService = getCategoryService();
 
     const [loading, setLoading] = useState<boolean>(false)
-    const [categories, setCategories] = useState<CategoryOutputs>([]);
+    const [categories, setCategories] = useState<CategoryDtos>([]);
 
     const fetchCategories = useCallback(async (params: CategorySearchParam) => {
         setLoading(true);

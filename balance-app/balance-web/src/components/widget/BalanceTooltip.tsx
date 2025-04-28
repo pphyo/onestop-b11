@@ -11,7 +11,7 @@ export const BalanceTooltip: React.FC<BalanceTooltipProps> = ({children, content
   return (
     <TooltipProvider>
         <Tooltip>
-            <TooltipTrigger>{children}</TooltipTrigger>
+            <TooltipTrigger asChild>{children}</TooltipTrigger>
             <TooltipContent>
                 <p>{content}</p>
             </TooltipContent>

@@ -29,21 +29,14 @@ export interface IconDto {
 }
 
 export type IconDtos = IconDto[];
-export interface CategoryInput {
+export interface CategoryDto<T = number> {
     id: number;
     name: string;
     income: boolean;
-    iconId: number;
+    icon: T;
 }
 
-export interface CategoryOutput {
-    id: number;
-    name: string;
-    income: boolean;
-    icon: IconDto;
-}
-
-export type CategoryOutputs = CategoryOutput[];
+export type CategoryDtos = CategoryDto<IconDto>[];
 
 export interface AccountOverall {
     incomeWithFormat: string;
@@ -60,3 +53,33 @@ export interface AccountDto<T = number> {
 }
 
 export type AccountDtos<T> = AccountDto<T>[];
+
+export type TransactionType = "Income" | "Expense" | "Transfer"
+
+interface TransactionBaseDto {
+    id: number;
+    amount: number;
+    amountWithFormat?: string;
+    note: string;
+    issuedAt?: string;
+}
+
+export type TransactionDto<T = number, P = number> = {
+    type: "Income" | "Expense";
+    category: T;
+    account: P;
+} & TransactionBaseDto | {
+    type: "Transfer";
+    accountFrom: T;
+    accountTo: P;
+} & TransactionBaseDto;
+
+export type TransactionForDaily = {
+    date: string;
+    transactions: TransactionDto<AccountDto<IconDto>, AccountDto<IconDto> | CategoryDto<IconDto>>;
+}
+
+export type TransactionForMonthly = {
+    month: string;
+    dailyTransactions: TransactionForDaily[]
+}

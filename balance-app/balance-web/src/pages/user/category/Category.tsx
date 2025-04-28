@@ -15,7 +15,6 @@ import MainPageTitle from "@/components/widget/MainPageTitle";
 import { useCategory } from "@/hooks/useCategory";
 import MainPageLayout from "@/layouts/MainPageLayout";
 import { cn } from "@/lib/utils";
-import { CategoryOutput } from "@/model/dto/balance.dto";
 import { CategoryIconFilter, CategorySearchParam } from "@/model/dto/balance.search-param";
 import { getCategoryService } from "@/model/service/category.service";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +23,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router";
 import { z } from "zod";
+import { CategoryDto, IconDto } from "@/model/dto/balance.dto";
 
 export const iconFormSchema = z.object({
     id: z.number(),
@@ -99,7 +99,7 @@ const Category = () => {
             id: data.id,
             name: data.name,
             income: data.income,
-            iconId: data.icon.id
+            icon: data.icon.id
         });
         if(response) {
             refetch({name: "", income: undefined})
@@ -113,7 +113,7 @@ const Category = () => {
         setIdForDelete(id);
     };
 
-    const handleEdit = (data: CategoryOutput) => {
+    const handleEdit = (data: CategoryDto<IconDto>) => {
         resetForm();
         form.setValue("id", data.id);
         form.setValue("name", data.name);

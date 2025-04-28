@@ -19,6 +19,8 @@ import com.jdc.balance.core.model.entity.AccountEntity;
 import com.jdc.balance.core.model.entity.CategoryEntity;
 import com.jdc.balance.core.model.entity.TransactionEntity;
 import com.jdc.balance.core.model.entity.TransactionEntity_;
+import com.jdc.balance.core.model.entity.consts.TransactionType;
+import com.jdc.balance.core.payload.input.TransactionBaseInput;
 import com.jdc.balance.core.payload.input.TransactionForIncomeExpenseInput;
 import com.jdc.balance.core.payload.input.TransactionForTransferInput;
 import com.jdc.balance.core.payload.output.TransactionBaseOutput;
@@ -45,7 +47,14 @@ public class TransactionService {
 	private final CategoryRepository categoryRepo;
 	private final AmountFormatService formatService;
 	
-	public TransactionBaseOutput create(TransactionForIncomeExpenseInput input) {
+	public TransactionBaseOutput create(TransactionBaseInput input) {
+		if(input instanceof TransactionForTransferInput data) {
+			return createTransfer(data);
+		}
+		return createIncomeExpense((TransactionForIncomeExpenseInput) input);
+	}
+	
+	private TransactionBaseOutput createIncomeExpense(TransactionForIncomeExpenseInput input) {
 		Function<Long, AccountEntity> accountMapper = 
 				accountId -> accountRepo
 								.findById(accountId)
@@ -60,7 +69,67 @@ public class TransactionService {
 		return TransactionForIncomeExpenseOutput.from(transactionRepo.save(entity), formatMapper);
 	}
 	
-	public TransactionBaseOutput update(Long id, TransactionForIncomeExpenseInput input) {
+	private TransactionBaseOutput createTransfer(TransactionForTransferInput input) {
+		Function<Long, AccountEntity> accountMapper = 
+				accountId -> accountRepo
+								.findById(accountId)
+								.orElseThrow(() -> notFoundWithId("account", accountId));
+		Function<BigDecimal, String> formatMapper = amount -> formatService.formatAmount(amount);
+		
+		var entity = transactionRepo.save(input.entity(accountMapper));
+		
+		return TransactionForTransferOutput.from(entity, formatMapper);
+	}
+	
+	public TransactionBaseOutput update(Long id, TransactionBaseInput input) {
+		var transaction = transactionRepo.findById(id).orElseThrow(() -> notFoundWithId("transaction", id));
+		
+		revertTransaction(transaction);
+		
+		transaction.setAmount(input.amount());
+		transaction.setType(input.type());
+		transaction.setIssuedAt(input.issuedAt() == null ? LocalDateTime.now() : input.issuedAt());
+		transaction.setNote(input.note());
+		
+		Function<Long, AccountEntity> accountMapper = 
+				accountId -> accountRepo.findById(accountId)
+								.orElseThrow(() -> notFoundWithId("account", accountId));
+
+		if(input.type().equals(TransactionType.Transfer)
+				&& input instanceof TransactionForTransferInput data) {
+			
+			var fromForUpdate = accountMapper.apply(data.accountFrom());
+			var toForUpdate = accountMapper.apply(data.accountTo());
+			transaction.transfer(fromForUpdate, toForUpdate, data.amount());
+			
+			transaction.setAccount(fromForUpdate);
+			transaction.setTargetAccount(toForUpdate);
+		} else {
+			var data = (TransactionForIncomeExpenseInput) input;
+			var newAccount = accountMapper.apply(data.account());
+			newAccount.balanceAmount(data.type(), data.amount());
+			
+			transaction.setAccount(newAccount);
+			transaction.setCategory(categoryRepo.findById(data.category())
+						.orElseThrow(() -> notFoundWithId("category", data.category())));
+		}
+		
+		return input.type().equals(TransactionType.Transfer) ?
+				TransactionForTransferOutput.from(transaction, amount -> formatService.formatAmount(amount)) :
+				TransactionForIncomeExpenseOutput.from(transaction, amount -> formatService.formatAmount(amount)) ;
+	}
+	
+	private void revertTransaction(TransactionEntity transaction) {
+		if(transaction.getType() == TransactionType.Transfer) {
+			transaction.revertTransfer(transaction.getAccount(), transaction.getTargetAccount(), transaction.getAmount());
+			transaction.setTargetAccount(null);
+		} else {
+			transaction.getAccount().revertBalanceAmount(transaction.getType(), transaction.getAmount());
+			transaction.setCategory(null);
+		}
+	}
+
+	public TransactionBaseOutput updateIncomeExpense(Long id, TransactionForIncomeExpenseInput input) {
 		var transaction = transactionRepo.findById(id).orElseThrow(() -> notFoundWithId("transaction", id));
 		
 		// revert balance
@@ -90,18 +159,6 @@ public class TransactionService {
 		transaction.setCategory(newCategory);
 		
 		return TransactionForIncomeExpenseOutput.from(transaction, amount -> formatService.formatAmount(amount));
-	}
-
-	public TransactionBaseOutput createTransfer(TransactionForTransferInput input) {
-		Function<Long, AccountEntity> accountMapper = 
-				accountId -> accountRepo
-								.findById(accountId)
-								.orElseThrow(() -> notFoundWithId("account", accountId));
-		Function<BigDecimal, String> formatMapper = amount -> formatService.formatAmount(amount);
-		
-		var entity = transactionRepo.save(input.entity(accountMapper));
-		
-		return TransactionForTransferOutput.from(entity, formatMapper);
 	}
 
 	public TransactionBaseOutput updateTransfer(Long id, TransactionForTransferInput input) {
