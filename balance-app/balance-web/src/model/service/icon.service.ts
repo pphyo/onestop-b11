@@ -3,7 +3,7 @@ import { IconSearchParam } from "../dto/balance.search-param";
 import { BalanceApiPayload, IconDto, IconDtos } from "../dto/balance.dto";
 import axiosInstance from "@/axios/axios-instance";
 
-const ICONS_API = `${BASE_API}/user/icons`;
+const ICONS_API = `${BASE_API}/any/icons`;
 
 class IconService {
     private static instance: IconService;

@@ -7,6 +7,7 @@ import { getAuthService } from "@/model/service/auth.service";
 import AuthenticatedRoute from "@/routes/AuthenticatedRoute";
 import { Outlet } from "react-router";
 import logo from "@/assets/images/logo.png";
+import BalanceErrorAlert from "@/error/BalanceErrorAlert";
 
 const AppLayout = () => {
     const authService = getAuthService();
@@ -28,6 +29,7 @@ const AppLayout = () => {
                 <Outlet />
             </main>
         </SidebarProvider>
+        <BalanceErrorAlert />
     </AuthenticatedRoute>
   )
 }

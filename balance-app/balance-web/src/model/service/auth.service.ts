@@ -29,6 +29,15 @@ class AuthService {
         return resp;
     }
 
+    async refresh(): Promise<UserDto> {
+        const refreshToken = this.getCurrentUser()?.refreshToken;
+        const refreshedUser = await axiosInstance.post<UserDto>(`${AUTH_API}/refresh`, {token: refreshToken}).then(res => res.data);
+        if(refreshedUser) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(refreshedUser));
+        }
+        return refreshedUser;
+    }
+
     getCurrentUser(): UserDto | null {
         const result = localStorage.getItem(this.USER_KEY);
         return result ? JSON.parse(result) : null;

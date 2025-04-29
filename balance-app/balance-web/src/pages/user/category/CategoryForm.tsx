@@ -30,10 +30,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({form, open, onClose, onSubmi
         if(!open)
             return;
 
-        const newParam = {name: "", filter: initialFilter, account: false};
-
         const fetchIcons = async () => {
-            const result = await iconService.search(newParam); // Use param directly
+            const result = await iconService.search({name: "", filter: initialFilter, account: false});
             setIcons(result.payload);
         };
 

@@ -64,7 +64,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 			} catch (Exception e) {
 				log.error("Failed to parse token: {}", e.getMessage());
 				SecurityContextHolder.clearContext();
-				e.printStackTrace();
 			}
 		}
 		
