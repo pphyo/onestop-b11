@@ -83,3 +83,11 @@ export type TransactionForMonthly = {
     month: string;
     dailyTransactions: TransactionForDaily[]
 }
+
+export type PieChartDto = {
+    name: string;
+    amount: number;
+    fill: string;
+}
+
+export type PieChartDtos = PieChartDto[];

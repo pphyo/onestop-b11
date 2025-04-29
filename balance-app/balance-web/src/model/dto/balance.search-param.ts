@@ -26,3 +26,8 @@ export interface TransactionSearchParam {
     amount: number;
     keyword: string;
 }
+
+export interface PieChartSearchParam {
+    month: string;
+    income: boolean;
+}
